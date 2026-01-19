@@ -1,0 +1,42 @@
+TECHNOLOGY ADVANCES
+============================================================
+
+SUMMARY BY COUNTRY
+----------------------------------------
+MLO  : 141 advances, 6 institutions
+GBR  : 141 advances, 6 institutions
+BOH  : 136 advances, 6 institutions
+POL  : 134 advances, 6 institutions
+FRA  : 133 advances, 6 institutions
+IRE  : 132 advances, 6 institutions
+SER  : 130 advances, 6 institutions
+SWE  : 130 advances, 5 institutions
+TUR  : 129 advances, 6 institutions
+SKO  : 105 advances, 4 institutions
+
+
+INSTITUTIONS BY COUNTRY
+----------------------------------------
+MLO: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+GBR: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+BOH: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+POL: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+FRA: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+IRE: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+SER: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+SWE: professional_armies, banking, renaissance, legalism, feudalism
+TUR: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+SKO: professional_armies, renaissance, legalism, feudalism
+
+
+UNIQUE INSTITUTIONS (not shared by all)
+----------------------------------------
+MLO has: meritocracy, banking
+GBR has: meritocracy, banking
+BOH has: meritocracy, banking
+POL has: meritocracy, banking
+FRA has: meritocracy, banking
+IRE has: meritocracy, banking
+SER has: meritocracy, banking
+SWE has: banking
+TUR has: meritocracy, banking

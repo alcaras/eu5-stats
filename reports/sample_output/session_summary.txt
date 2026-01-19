@@ -1,0 +1,164 @@
+=======================================================
+EU5 MP SESSION REPORT
+=======================================================
+Save: 1433.1.1 | Players: 10
+Generated: 2026-01-17 21:14
+
+=======================================================
+GREAT POWER RANKINGS
+-------------------------------------------------------
+#  Tag  GP  Pop     Income  TaxBase 
+-------------------------------------------------------
+1  MLO  2   3.72M   583.5   987.6   
+2  BOH  3   3.78M   1,087   1,790   
+3  FRA  12  5.53M   439.1   542.6   
+4  POL  17  2.42M   175.7   367.5   
+5  SER  19  2.57M   182.2   280.3   
+6  GBR  22  4.11M   137.2   319.2   
+7  IRE  37  1.02M   58.0    124.2   
+8  SWE  40  1.24M   77.4    123.5   
+9  TUR  49  3.67M   106.4   221.6   
+10 SKO  69  2.45M   39.4    97.1    
+
+=======================================================
+RULERS (sorted by total stats)
+-------------------------------------------------------
+Tag  A   D   M   Tot  Name        Traits              
+-------------------------------------------------------
+FRA  100 93  100 293  Louis       tactical_genius, ind
+IRE  47  75  64  186  Martin      loose_lips, righteou
+BOH  58  51  51  160  Sigmund     drunkard, calm
+TUR  45  42  58  145  Muhammad    well_connected
+SER  42  40  53  135  Boleslava   bold_fighter
+GBR  41  1   85  127  Gerard      embezzler
+MLO  30  24  49  103  Paul        scholar, industrious
+SKO  31  37  30  98   Faiqah      careful
+POL  29  24  25  78   Casimir     entrepreneur
+SWE  0   0   0   0                
+
+=======================================================
+ECONOMY (by income)
+-------------------------------------------------------
+Tag  Income   Treasury  TaxBase  LoanCap  
+-------------------------------------------------------
+BOH  1,087    10.7K     1,790    62.2K    
+MLO  583.5    838.7     987.6    29.2K    
+FRA  439.1    5,179     542.6    27.7K    
+SER  182.2    511.1     280.3    13.0K    
+POL  175.7    1,499     367.5    14.4K    
+GBR  137.2    216.3     319.2    13.2K    
+TUR  106.4    316.6     221.6    5,679    
+SWE  77.4     60.4      123.5    4,624    
+IRE  58.0     411.4     124.2    4,368    
+SKO  39.4     53.5      97.1     2,615    
+
+=======================================================
+POPULATION
+-------------------------------------------------------
+Tag  Pop       Provs  Pop/Prov  
+-------------------------------------------------------
+FRA  5.53M     44     0.13M     
+GBR  4.11M     59     69.7K     
+BOH  3.78M     32     0.12M     
+MLO  3.72M     35     0.11M     
+TUR  3.67M     39     94.1K     
+SER  2.57M     40     64.2K     
+SKO  2.45M     20     0.12M     
+POL  2.42M     43     56.3K     
+SWE  1.24M     33     37.6K     
+IRE  1.02M     20     51.1K     
+
+=======================================================
+MILITARY (by regiments)
+-------------------------------------------------------
+Tag  Regs  MP     MaxMP  ArmyT  NavyT  
+-------------------------------------------------------
+BOH  172   48.6   49.2   18.8   2.2    
+MLO  129   35.4   35.7   11.3   8.8    
+SER  70    9.6    9.6    18.1   2.6    
+FRA  67    13.1   15.4   32.9   0.0    
+SWE  53    0.0    2.0    28.2   1.5    
+POL  36    8.5    8.5    26.7   3.5    
+TUR  34    1.1    2.6    25.4   7.5    
+IRE  32    2.3    2.3    13.6   7.4    
+GBR  20    2.1    2.1    16.0   10.9   
+SKO  0     0.3    0.3    18.2   0.0    
+
+=======================================================
+PRODUCTION
+-------------------------------------------------------
+Tag  Total   Top 3 Goods                             
+-------------------------------------------------------
+MLO  2,266   wheat:208, lumber:188, livestock:179
+BOH  2,165   lumber:151, wheat:140, silver:120
+FRA  1,404   wheat:112, lumber:111, tools:100
+GBR  1,059   wool:123, wheat:71, lumber:48
+POL  837.9   wool:91, iron:51, tools:49
+SER  761.4   lumber:47, silver:46, tools:41
+TUR  635.4   lumber:48, silk:42, fish:30
+SWE  467.4   lumber:79, fish:41, wild_game:39
+SKO  418.2   livestock:28, cloth:28, lumber:23
+IRE  284.4   wheat:36, livestock:35, beeswax:17
+
+=======================================================
+TECHNOLOGY
+-------------------------------------------------------
+Tag  Advs  Inst Latest Institutions                
+-------------------------------------------------------
+GBR  141   6    professional_armies, banking, renai
+MLO  141   6    professional_armies, banking, renai
+BOH  136   6    professional_armies, banking, renai
+POL  134   6    professional_armies, banking, renai
+FRA  133   6    professional_armies, banking, renai
+IRE  132   6    professional_armies, banking, renai
+SWE  130   5    professional_armies, banking, renai
+SER  130   6    professional_armies, banking, renai
+TUR  129   6    professional_armies, banking, renai
+SKO  105   4    professional_armies, renaissance, l
+
+=======================================================
+GOVERNMENT & RELIGION
+-------------------------------------------------------
+Tag  Type      Religion  Stab   Prest  
+-------------------------------------------------------
+MLO  monarchy  Catholic  73.7   1.6    
+BOH  monarchy  Hussite   43.3   28.9   
+FRA  monarchy  Catholic  11.9   46.3   
+POL  theocracy Sunni     -11.7  0.1    
+SER  monarchy  Orthodox  24.7   3.1    
+GBR  monarchy  Sunni     -21.8  22.3   
+IRE  monarchy  Catholic  79.9   22.2   
+SWE  monarchy  Catholic  78.8   4.0    
+TUR  monarchy  Sunni     1.8    6.4    
+SKO  monarchy  Sunni     -22.9  5.7    
+
+=======================================================
+VALUES (cent/serf/arist/trad/spirit)
+-------------------------------------------------------
+MLO    100   20  -76   56  -59
+BOH     90 -100 -100   96 -100
+FRA     71  -55  -77   71   17
+POL    100  -71 -100  100 -100
+SER     80  -53  -69   61   -1
+GBR     74  -10  -55   38  -66
+IRE     43   10  -95    7   -2
+SWE    -14   20  -60   -0  -55
+TUR     57   20  -50  -13  -24
+SKO     77  -89  -99   67    2
+
+VALUES (capital/indiv/qual/offen/land/bell)
+-------------------------------------------------------
+MLO    -28   12   12  -15   23   29
+BOH    100   98  -30   39  -96  -49
+FRA     69   60  -37    8  -64   35
+POL    -39  100  -35  -57  -85  -63
+SER    -17   57  -19   39  -56  -18
+GBR    -25   84  -16   10   33  -72
+IRE     47   15   11  -20   12  -35
+SWE     97   42   13  -17   -7  -30
+TUR     90  100  -32   -5  -34  -65
+SKO    -30   60  -24  -12  -62  -40
+
+=======================================================
+END OF SUMMARY
+=======================================================

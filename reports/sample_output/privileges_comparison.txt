@@ -1,0 +1,177 @@
+=======================================================
+EU5 PRIVILEGES COMPARISON
+=======================================================
+Save: 1433.1.1 | Players: 10
+
+=======================================================
+NOBLES PRIVILEGES (10 unique)
+=======================================================
+  Nobles Land Rights: ALL
+  Noble Marriage Rights: BOH, FRA, SER, GBR, IRE, SWE, TUR, SKO
+  Noble Fortification Licenses: MLO, BOH, FRA, SER, GBR, IRE, SWE
+  Noble Serfdom Rights: MLO, BOH, POL, SER, GBR, SWE, SKO
+  Auxilium Et Consilium: BOH, FRA, SER, IRE, SWE
+  Primacy Of Nobility: BOH, FRA, POL, TUR, SKO
+  Noble Patronage Of The Arts: MLO, BOH, SER, SKO
+  Noble Sponsored Navy: GBR, IRE, TUR
+  Noble Armies: FRA
+  Noble Leaders Only: SKO
+
+=======================================================
+CLERGY PRIVILEGES (9 unique)
+=======================================================
+  Clergy Enforced Unity: MLO, FRA, POL, SER, GBR, IRE, SWE, TUR
+  Clergy Religious State: MLO, BOH, FRA, POL, SER, GBR, SKO
+  Clergy Literacy Rights: MLO, SER, IRE, SWE, TUR, SKO
+  Clergy Strengthen Faith: BOH, FRA, POL, SER, GBR, SKO
+  Clerical Advisory Council: MLO, BOH, POL, GBR, TUR
+  Clergy In Administration: MLO, BOH, POL, GBR
+  Embellish Great Works Of Faith: POL, SER, SWE, TUR
+  Clergy Land Rights: POL, TUR, SKO
+  Clergy Powerful Dioceses: BOH, SER
+
+=======================================================
+BURGHERS PRIVILEGES (7 unique)
+=======================================================
+  Market Fairs: BOH, FRA, POL, SER, GBR, IRE, SWE, TUR, SKO
+  Formal Guilds: MLO, BOH, SER, GBR, IRE, SWE, TUR, SKO
+  Treasury Rights: MLO, BOH, FRA, POL, SER, GBR, IRE, SWE
+  Control Over The Coinage: MLO, BOH, POL, SER, SWE
+  Commercial Advisory Council: MLO, SER, SWE, SKO
+  Burghers Land Rights: MLO, SWE, SKO
+  Polish Merchant Seal: POL
+
+=======================================================
+PEASANTS PRIVILEGES (7 unique)
+=======================================================
+  Peasants Allowed Weapons Privilege: MLO, BOH, FRA, SER, GBR, TUR, SKO
+  Peasants In Administration: MLO, BOH, FRA, SER, SKO
+  Peasants Free Peasantry: MLO, BOH, SWE, TUR
+  Peasants Represented In Parliament: MLO, FRA, SER, SWE
+  Land Owning Farmers: SWE
+  Peasant Owns Their Food: BOH
+  Peasants Yeomanry: GBR
+
+=======================================================
+DHIMMI PRIVILEGES (9 unique)
+=======================================================
+  Dhimmi In Administration: MLO, SER
+  Dhimmi Land Rights: GBR, TUR
+  Dhimmi Pact Of Umar: SER, TUR
+  Dhimmi Abrahamic Communities: TUR
+  Dhimmi Administrative Posts: TUR
+  Dhimmi Legal Autonomy: MLO
+  Dhimmi Lighter Taxes: GBR
+  Dhimmi Military Service: TUR
+  Dhimmi Promote Tolerance: TUR
+
+=======================================================
+TRIBES PRIVILEGES (8 unique)
+=======================================================
+  Tribes Allow Gatherings: POL, GBR, IRE, SWE, SKO
+  Tribes Land Rights: POL, GBR, IRE, TUR, SKO
+  Expansionist Zealotry: BOH, POL, SER, GBR
+  Tribes In Administration: POL, GBR, IRE
+  Tribes Tribal Levies: GBR, TUR, SKO
+  Tribes Tribal Registry: POL, GBR
+  Tribes Pasture Access: TUR
+  Tribes Protected Faith: GBR
+
+=======================================================
+GENERAL PRIVILEGES (38 unique)
+=======================================================
+  Building Roads Rights: MLO, BOH, FRA, SER, GBR, IRE, SWE, SKO
+  Communal Lands: MLO, BOH, FRA, SER, GBR, IRE, TUR, SKO
+  Reduced From Military Obligations: MLO, BOH, FRA, POL, SER, GBR
+  Access To Royal And Ecclesiastical Courts: BOH, FRA, GBR, IRE, SWE
+  Allow Hunting: BOH, FRA, GBR, IRE, SKO
+  Elaborate Court Ceremonies: MLO, GBR, IRE, TUR, SKO
+  Building Rights: MLO, POL, TUR, SKO
+  Control Over Monetary Policy: BOH, SER, IRE, SKO
+  Land Of Commerce: MLO, BOH, POL, SER
+  Allow Trade Center Sponsorship: POL, SER, SKO
+  Guild Investments: BOH, SER, SKO
+  Shipwright Contracts: BOH, GBR, TUR
+  Urban Development Grants: BOH, FRA, SER
+  Nobility Council: MLO, BOH
+  Partial Yield: MLO, TUR
+  Promote Cultural Unity: POL, SER
+  Trade Monopolies: MLO, SKO
+  Bashtinas And Pronijas Grants: SER
+  Chancellor Nobles: FRA
+  Control Of The Borderlands: POL
+  District Paving Privilege: BOH
+  Feudal Mercenary Contracts: TUR
+  Freedom Of Interpretation: SKO
+  Ghazi Privilege: TUR
+  Gradozadanje And Gradobljudenlje Rights: SER
+  Great Offices Of The Crown Of France: FRA
+  Magdeburg Rights: BOH
+  Manorial Courts: BOH
+  Milanese Cloth Guilds Privileges: MLO
+  No Labor Sunday: BOH
+  Privilege Of Koszyce: POL
+  Religious Diplomats: POL
+  Right To Inherit: BOH
+  Sponsor Maritime Contracts: TUR
+  Tax Exemption: POL
+  Trunk Road To Erzurum Privilege: TUR
+  Villes Franches: FRA
+  Zupa Districts: SER
+
+=======================================================
+PRIVILEGES BY COUNTRY
+-------------------------------------------------------
+MLO: 30 total (Burghers:5, Clergy:5, Dhimmi:2, General:10, Nobles:4, Peasants:4)
+BOH: 37 total (Burghers:4, Clergy:5, General:16, Nobles:7, Peasants:4, Tribes:1)
+FRA: 23 total (Burghers:2, Clergy:3, General:9, Nobles:6, Peasants:3)
+POL: 28 total (Burghers:4, Clergy:7, General:9, Nobles:3, Tribes:5)
+SER: 35 total (Burghers:5, Clergy:6, Dhimmi:2, General:12, Nobles:6, Peasants:3, Tribes:1)
+GBR: 31 total (Burghers:3, Clergy:5, Dhimmi:2, General:7, Nobles:5, Peasants:2, Tribes:7)
+IRE: 19 total (Burghers:3, Clergy:2, General:6, Nobles:5, Tribes:3)
+SWE: 20 total (Burghers:6, Clergy:3, General:2, Nobles:5, Peasants:3, Tribes:1)
+TUR: 31 total (Burghers:2, Clergy:5, Dhimmi:6, General:9, Nobles:4, Peasants:2, Tribes:3)
+SKO: 29 total (Burghers:4, Clergy:4, General:10, Nobles:6, Peasants:2, Tribes:3)
+
+=======================================================
+UNIQUE PRIVILEGES (only one country)
+-------------------------------------------------------
+  FRA: Noble Armies
+  SKO: Noble Leaders Only
+  POL: Polish Merchant Seal
+  SWE: Land Owning Farmers
+  BOH: Peasant Owns Their Food
+  GBR: Peasants Yeomanry
+  TUR: Dhimmi Abrahamic Communities
+  TUR: Dhimmi Administrative Posts
+  MLO: Dhimmi Legal Autonomy
+  GBR: Dhimmi Lighter Taxes
+  TUR: Dhimmi Military Service
+  TUR: Dhimmi Promote Tolerance
+  TUR: Tribes Pasture Access
+  GBR: Tribes Protected Faith
+  SER: Bashtinas And Pronijas Grants
+  FRA: Chancellor Nobles
+  POL: Control Of The Borderlands
+  BOH: District Paving Privilege
+  TUR: Feudal Mercenary Contracts
+  SKO: Freedom Of Interpretation
+  TUR: Ghazi Privilege
+  SER: Gradozadanje And Gradobljudenlje Rights
+  FRA: Great Offices Of The Crown Of France
+  BOH: Magdeburg Rights
+  BOH: Manorial Courts
+  MLO: Milanese Cloth Guilds Privileges
+  BOH: No Labor Sunday
+  POL: Privilege Of Koszyce
+  POL: Religious Diplomats
+  BOH: Right To Inherit
+  TUR: Sponsor Maritime Contracts
+  POL: Tax Exemption
+  TUR: Trunk Road To Erzurum Privilege
+  FRA: Villes Franches
+  SER: Zupa Districts
+
+=======================================================
+END OF PRIVILEGES REPORT
+=======================================================

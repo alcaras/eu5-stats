@@ -1,0 +1,25 @@
+# Save files (too large to include)
+save/*.eu5
+!save/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Generated reports (except sample)
+reports/*/
+!reports/sample_output/
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Claude/IDE files
+.claude/

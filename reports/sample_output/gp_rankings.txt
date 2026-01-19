@@ -1,0 +1,13 @@
+GREAT POWER RANKINGS
+==================================================
+
+ 1. MLO   - GP #2    | Pop: 3.72M | Income: 584
+ 2. BOH   - GP #3    | Pop: 3.78M | Income: 1087
+ 3. FRA   - GP #12   | Pop: 5.53M | Income: 439
+ 4. POL   - GP #17   | Pop: 2.42M | Income: 176
+ 5. SER   - GP #19   | Pop: 2.57M | Income: 182
+ 6. GBR   - GP #22   | Pop: 4.11M | Income: 137
+ 7. IRE   - GP #37   | Pop: 1.02M | Income: 58
+ 8. SWE   - GP #40   | Pop: 1.24M | Income: 77
+ 9. TUR   - GP #49   | Pop: 3.67M | Income: 106
+10. SKO   - GP #69   | Pop: 2.45M | Income: 39

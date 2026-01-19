@@ -1,0 +1,13 @@
+# EU5 Multiplayer - Human-controlled countries
+# One country tag per line
+# Use the tag from the save file (check flag=TAG for formed nations)
+GBR
+POL
+FRA
+SWE
+SKO
+BOH
+MLO
+SER
+TUR
+IRE
