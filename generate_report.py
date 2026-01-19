@@ -362,6 +362,130 @@ def get_save_date(filepath: str) -> str:
     return "Unknown"
 
 
+def extract_country_tags(filepath: str) -> dict[int, str]:
+    """Extract country ID -> tag mapping from countries.tags section."""
+    tags = {}
+    with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+        in_countries = False
+        in_tags = False
+        for line in f:
+            if not in_countries:
+                if line.strip().startswith('countries='):
+                    in_countries = True
+                continue
+            if not in_tags:
+                if line.strip().startswith('tags='):
+                    in_tags = True
+                continue
+            # Parse tag entries: ID=TAG
+            stripped = line.strip()
+            if stripped == '}':
+                break
+            match = re.match(r'(\d+)=(\w+)', stripped)
+            if match:
+                tags[int(match.group(1))] = match.group(2)
+    return tags
+
+
+def extract_location_control(filepath: str) -> dict[int, list[float]]:
+    """Extract control values per owner ID from locations section.
+
+    Returns dict mapping owner_id -> list of control values (0-1 scale).
+    Locations without explicit control field have 0 control.
+    """
+    owner_controls = {}
+    with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+        in_locations = False
+        in_inner_locations = False
+        in_location_block = False
+        current_owner = None
+        current_control = None
+        block_depth = 0
+
+        for line in f:
+            stripped = line.strip()
+
+            # Find outer locations={ (at start of line, no indent)
+            if not in_locations:
+                if line.startswith('locations={'):
+                    in_locations = True
+                continue
+
+            # Find inner locations={ (indented)
+            if not in_inner_locations:
+                if stripped == 'locations={':
+                    in_inner_locations = True
+                continue
+
+            # Track block depth and detect location blocks (e.g., "123={")
+            if re.match(r'\d+={', stripped):
+                in_location_block = True
+                block_depth = 1
+                current_owner = None
+                current_control = None
+                continue
+
+            if in_location_block:
+                block_depth += stripped.count('{') - stripped.count('}')
+
+                # Track current location's owner
+                if stripped.startswith('owner='):
+                    try:
+                        current_owner = int(stripped.split('=')[1])
+                    except ValueError:
+                        current_owner = None
+
+                # Track control value
+                if stripped.startswith('control='):
+                    try:
+                        current_control = float(stripped.split('=')[1])
+                    except ValueError:
+                        current_control = 0.0
+
+                # End of location block
+                if block_depth <= 0:
+                    if current_owner is not None:
+                        control_val = current_control if current_control is not None else 0.0
+                        if current_owner not in owner_controls:
+                            owner_controls[current_owner] = []
+                        owner_controls[current_owner].append(control_val)
+                    in_location_block = False
+                    current_owner = None
+                    current_control = None
+
+            # Stop at end of outer locations section (unindented closing brace)
+            if line.startswith('}') and in_inner_locations:
+                break
+
+    return owner_controls
+
+
+def calculate_average_control(filepath: str, player_tags: list[str]) -> dict[str, float]:
+    """Calculate average control for each player country.
+
+    Returns dict mapping tag -> average control (0-100 scale).
+    """
+    # Get ID -> tag mapping
+    id_to_tag = extract_country_tags(filepath)
+    tag_to_id = {v: k for k, v in id_to_tag.items()}
+
+    # Get control data per owner ID
+    owner_controls = extract_location_control(filepath)
+
+    # Calculate average for each player tag
+    result = {}
+    for tag in player_tags:
+        owner_id = tag_to_id.get(tag)
+        if owner_id is not None and owner_id in owner_controls:
+            controls = owner_controls[owner_id]
+            avg = sum(controls) / len(controls) if controls else 0.0
+            result[tag] = avg * 100  # Convert to 0-100 scale
+        else:
+            result[tag] = 0.0
+
+    return result
+
+
 def fmt_pop(val: float) -> str:
     """Population in millions."""
     return f"{val/1000:.2f}M" if val >= 100 else f"{val:.1f}K"
@@ -509,6 +633,18 @@ def generate_summary_report(countries: list[CountryStats], save_date: str) -> st
 
     for c in by_gp:
         lines.append(f"{c.tag:<5}{c.government_type[:9]:<10}{c.religion_name[:9]:<10}{c.stability:<7.1f}{c.prestige:<7.1f}")
+    lines.append("")
+
+    # === CONTROL ===
+    lines.append("=" * W)
+    lines.append("CONTROL (avg across all locations)")
+    lines.append("-" * W)
+    lines.append(f"{'Tag':<5}{'Control':<10}{'Provs':<7}")
+    lines.append("-" * W)
+
+    by_control = sorted(countries, key=lambda c: c.average_control, reverse=True)
+    for c in by_control:
+        lines.append(f"{c.tag:<5}{c.average_control:<10.1f}{c.num_provinces:<7}")
     lines.append("")
 
     # === SOCIETAL VALUES - Compact ===
@@ -902,6 +1038,12 @@ def main():
             print("NOT FOUND", file=sys.stderr)
 
     if countries:
+        # Calculate control values from locations data
+        print("  Calculating control...", file=sys.stderr, end=" ", flush=True)
+        control_data = calculate_average_control(str(save_file), [c.tag for c in countries])
+        for c in countries:
+            c.average_control = control_data.get(c.tag, 0.0)
+        print("OK", file=sys.stderr)
         # Write summary report (Discord-friendly)
         summary_file = report_dir / "session_summary.txt"
         with open(summary_file, 'w') as f:

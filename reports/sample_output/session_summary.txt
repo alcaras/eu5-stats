@@ -2,7 +2,7 @@
 EU5 MP SESSION REPORT
 =======================================================
 Save: 1433.1.1 | Players: 10
-Generated: 2026-01-17 21:14
+Generated: 2026-01-19 11:41
 
 =======================================================
 GREAT POWER RANKINGS
@@ -103,18 +103,18 @@ IRE  284.4   wheat:36, livestock:35, beeswax:17
 =======================================================
 TECHNOLOGY
 -------------------------------------------------------
-Tag  Advs  Inst Latest Institutions                
+Tag  Advs  Inst Missing/Extra                      
 -------------------------------------------------------
-GBR  141   6    professional_armies, banking, renai
-MLO  141   6    professional_armies, banking, renai
-BOH  136   6    professional_armies, banking, renai
-POL  134   6    professional_armies, banking, renai
-FRA  133   6    professional_armies, banking, renai
-IRE  132   6    professional_armies, banking, renai
-SWE  130   5    professional_armies, banking, renai
-SER  130   6    professional_armies, banking, renai
-TUR  129   6    professional_armies, banking, renai
-SKO  105   4    professional_armies, renaissance, l
+GBR  141   6    (complete)
+MLO  141   6    (complete)
+BOH  136   6    (complete)
+POL  134   6    (complete)
+FRA  133   6    (complete)
+IRE  132   6    (complete)
+SWE  130   5    -meritocracy
+SER  130   6    (complete)
+TUR  129   6    (complete)
+SKO  105   4    -banking, -meritocracy
 
 =======================================================
 GOVERNMENT & RELIGION
@@ -131,6 +131,22 @@ IRE  monarchy  Catholic  79.9   22.2
 SWE  monarchy  Catholic  78.8   4.0    
 TUR  monarchy  Sunni     1.8    6.4    
 SKO  monarchy  Sunni     -22.9  5.7    
+
+=======================================================
+CONTROL (avg across all locations)
+-------------------------------------------------------
+Tag  Control   Provs  
+-------------------------------------------------------
+BOH  54.9      32     
+MLO  52.6      35     
+IRE  44.3      20     
+FRA  39.4      44     
+SKO  36.7      20     
+SWE  30.6      33     
+POL  25.9      43     
+GBR  24.5      59     
+SER  19.4      40     
+TUR  16.6      39     
 
 =======================================================
 VALUES (cent/serf/arist/trad/spirit)
