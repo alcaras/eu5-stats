@@ -809,7 +809,14 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
     has_subjects = any(len(c.subjects) > 0 for c in countries)
 
     if has_subjects:
-        # Chart: Population + Subjects over time
+        # For treemaps: filter out player countries that are subjects of other player countries
+        # (they'll appear nested under their overlord, not as separate top-level entries)
+        all_player_subjects = set()
+        for c in countries:
+            all_player_subjects.update(c.subjects)
+        independent_countries = [c for c in countries if c.tag not in all_player_subjects]
+
+        # Chart: Population + Subjects over time (show ALL players, including vassalized ones)
         countries_with_combined = [c for c in countries if c.combined_historical_population]
         if countries_with_combined:
             fig, ax = plt.subplots(figsize=(14, 7))
@@ -834,7 +841,7 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
             plt.close()
             chart_num += 1
 
-        # Chart: Tax Base + Subjects over time
+        # Chart: Tax Base + Subjects over time (show ALL players, including vassalized ones)
         countries_with_combined_tax = [c for c in countries if c.combined_historical_tax_base]
         if countries_with_combined_tax:
             fig, ax = plt.subplots(figsize=(14, 7))
@@ -858,9 +865,9 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
             plt.close()
             chart_num += 1
 
-        # Nested Treemap: Population + Subjects
+        # Nested Treemap: Population + Subjects (only independent players, vassalized ones appear nested)
         fig, ax = plt.subplots(figsize=(14, 10))
-        countries_sorted = sorted(countries, key=lambda c: c.total_population, reverse=True)
+        countries_sorted = sorted(independent_countries, key=lambda c: c.total_population, reverse=True)
         nested_treemap_with_subjects(ax, countries_sorted, color_map,
                                     lambda c: c.population, lambda s: s.population,
                                     f'{chart_num}. Population Treemap with Subjects (thousands)')
@@ -870,9 +877,9 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
         plt.close()
         chart_num += 1
 
-        # Nested Treemap: Tax Base + Subjects
+        # Nested Treemap: Tax Base + Subjects (only independent players, vassalized ones appear nested)
         fig, ax = plt.subplots(figsize=(14, 10))
-        countries_sorted = sorted(countries, key=lambda c: c.total_tax_base, reverse=True)
+        countries_sorted = sorted(independent_countries, key=lambda c: c.total_tax_base, reverse=True)
         nested_treemap_with_subjects(ax, countries_sorted, color_map,
                                     lambda c: c.current_tax_base, lambda s: s.current_tax_base,
                                     f'{chart_num}. Tax Base Treemap with Subjects')
