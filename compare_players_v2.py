@@ -571,10 +571,16 @@ def simple_treemap(ax, sizes, labels, colors, title):
 
 
 def nested_treemap_with_subjects(ax, countries, color_map, get_country_value, get_subject_value, title):
-    """Create a treemap with nested subject boxes inside each country's box."""
+    """Create a treemap with nested subject boxes inside each country's box using squarify."""
     import matplotlib.patches as mpatches
 
-    # Filter and sort by total value (country + subjects)
+    try:
+        import squarify
+    except ImportError:
+        ax.text(0.5, 0.5, "squarify not installed", ha='center', va='center')
+        return
+
+    # Build data: (country, own_value, subject_values, total_value)
     data = []
     for c in countries:
         country_val = get_country_value(c)
@@ -588,101 +594,69 @@ def nested_treemap_with_subjects(ax, countries, color_map, get_country_value, ge
 
     data.sort(key=lambda x: x[3], reverse=True)
 
-    total = sum(d[3] for d in data)
+    # Get main rectangles using squarify
+    sizes = [d[3] for d in data]
+    rects = squarify.normalize_sizes(sizes, 100, 100)
+    rects = squarify.squarify(rects, 0, 0, 100, 100)
 
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.set_aspect('equal')
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
     ax.axis('off')
     ax.set_title(title, fontsize=14, fontweight='bold')
 
-    x, y = 0, 0
-    width, height = 1, 1
-    horizontal = True
-
-    for c, country_val, subject_vals, total_val in data:
-        normed = total_val / total
+    for i, (c, country_val, subject_vals, total_val) in enumerate(data):
+        r = rects[i]
+        x, y, w, h = r['x'], r['y'], r['dx'], r['dy']
         color = color_map.get(c.tag, (0.5, 0.5, 0.5))
 
-        if horizontal:
-            rect_width = normed * width / (sum(d[3] for d in data[data.index((c, country_val, subject_vals, total_val)):]) / total) if total > 0 else 0
-            rect_width = min(rect_width, width)
-            rect_height = height
+        # Main country rectangle
+        rect = mpatches.Rectangle((x, y), w, h, facecolor=color, edgecolor='white', linewidth=2)
+        ax.add_patch(rect)
 
-            # Main country rectangle
-            rect = mpatches.Rectangle((x, y), rect_width, rect_height,
-                                       facecolor=color, edgecolor='white', linewidth=2)
-            ax.add_patch(rect)
+        # Draw nested subjects inside (bottom portion)
+        if subject_vals and w > 5 and h > 5:
+            # Subjects take bottom 25% of the box
+            subj_height = h * 0.25
+            subj_y = y
 
-            # Draw subject boxes inside (stacked at bottom)
-            if subject_vals and rect_width > 0.05:
-                subj_y = y
-                subj_height = rect_height * 0.3  # Subjects take 30% of height
-                subj_total = sum(sv for _, sv in subject_vals)
-                subj_x = x
-                for subj_tag, subj_val in sorted(subject_vals, key=lambda x: x[1], reverse=True)[:5]:  # Max 5 subjects shown
-                    if subj_total > 0:
-                        subj_width = (subj_val / subj_total) * rect_width
-                        # Darker shade for subjects
-                        subj_color = (color[0] * 0.6, color[1] * 0.6, color[2] * 0.6)
-                        subj_rect = mpatches.Rectangle((subj_x, subj_y), subj_width, subj_height,
-                                                       facecolor=subj_color, edgecolor='white', linewidth=1)
-                        ax.add_patch(subj_rect)
-                        if subj_width > 0.03:
-                            ax.text(subj_x + subj_width / 2, subj_y + subj_height / 2,
-                                   subj_tag, ha='center', va='center', fontsize=7, color='white')
-                        subj_x += subj_width
+            # Use squarify for subject layout within the country box
+            subj_sizes = [sv for _, sv in sorted(subject_vals, key=lambda x: x[1], reverse=True)]
+            subj_tags = [st for st, _ in sorted(subject_vals, key=lambda x: x[1], reverse=True)]
 
-            # Main label
-            cx, cy = x + rect_width / 2, y + rect_height / 2 + (0.1 if subject_vals else 0)
-            label = f"{c.tag}\n{total_val:,.0f}"
-            if subject_vals:
-                label += f"\n(+{len(subject_vals)} subj)"
-            ax.text(cx, cy, label, ha='center', va='center',
-                    fontsize=10, fontweight='bold', color='white',
-                    bbox=dict(boxstyle='round', facecolor='black', alpha=0.3))
+            if subj_sizes:
+                subj_rects = squarify.normalize_sizes(subj_sizes, w, subj_height)
+                subj_rects = squarify.squarify(subj_rects, x, subj_y, w, subj_height)
 
-            x += rect_width
-            width -= rect_width
+                for j, sr in enumerate(subj_rects):
+                    if j >= len(subj_tags):
+                        break
+                    sx, sy, sw, sh = sr['x'], sr['y'], sr['dx'], sr['dy']
+                    # Darker shade for subjects
+                    subj_color = (color[0] * 0.5, color[1] * 0.5, color[2] * 0.5)
+                    subj_rect = mpatches.Rectangle((sx, sy), sw, sh,
+                                                   facecolor=subj_color, edgecolor='white', linewidth=1)
+                    ax.add_patch(subj_rect)
+                    # Label if big enough
+                    if sw > 4 and sh > 3:
+                        ax.text(sx + sw / 2, sy + sh / 2, subj_tags[j],
+                               ha='center', va='center', fontsize=7, color='white')
+
+        # Main label (centered in upper portion if subjects, else centered)
+        if subject_vals:
+            cx, cy = x + w / 2, y + h * 0.25 + (h * 0.75) / 2
         else:
-            rect_width = width
-            rect_height = normed * height / (sum(d[3] for d in data[data.index((c, country_val, subject_vals, total_val)):]) / total) if total > 0 else 0
-            rect_height = min(rect_height, height)
+            cx, cy = x + w / 2, y + h / 2
 
-            rect = mpatches.Rectangle((x, y), rect_width, rect_height,
-                                       facecolor=color, edgecolor='white', linewidth=2)
-            ax.add_patch(rect)
+        label = f"{c.tag}\n{total_val:,.0f}"
+        if subject_vals:
+            label += f"\n(+{len(subject_vals)})"
 
-            # Draw subject boxes
-            if subject_vals and rect_height > 0.05:
-                subj_x = x
-                subj_width = rect_width * 0.3
-                subj_total = sum(sv for _, sv in subject_vals)
-                subj_y = y
-                for subj_tag, subj_val in sorted(subject_vals, key=lambda x: x[1], reverse=True)[:5]:
-                    if subj_total > 0:
-                        subj_h = (subj_val / subj_total) * rect_height
-                        subj_color = (color[0] * 0.6, color[1] * 0.6, color[2] * 0.6)
-                        subj_rect = mpatches.Rectangle((subj_x, subj_y), subj_width, subj_h,
-                                                       facecolor=subj_color, edgecolor='white', linewidth=1)
-                        ax.add_patch(subj_rect)
-                        if subj_h > 0.03:
-                            ax.text(subj_x + subj_width / 2, subj_y + subj_h / 2,
-                                   subj_tag, ha='center', va='center', fontsize=7, color='white')
-                        subj_y += subj_h
-
-            cx, cy = x + rect_width / 2, y + rect_height / 2
-            label = f"{c.tag}\n{total_val:,.0f}"
-            if subject_vals:
-                label += f"\n(+{len(subject_vals)} subj)"
+        # Adjust font size based on box size
+        fontsize = min(12, max(8, int(min(w, h) / 8)))
+        if w > 8 and h > 8:
             ax.text(cx, cy, label, ha='center', va='center',
-                    fontsize=10, fontweight='bold', color='white',
-                    bbox=dict(boxstyle='round', facecolor='black', alpha=0.3))
-
-            y += rect_height
-            height -= rect_height
-
-        horizontal = not horizontal
+                    fontsize=fontsize, fontweight='bold', color='white',
+                    bbox=dict(boxstyle='round', facecolor='black', alpha=0.4))
 
 
 def create_graphs(countries: list[CountryStats], save_dir: Path):
