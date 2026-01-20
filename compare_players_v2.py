@@ -670,9 +670,14 @@ def nested_treemap_with_subjects(ax, countries, color_map, get_country_value, ge
             # Label if big enough
             if sw > 4 and sh > 3:
                 fontsize = 8 if is_player_subject else 7
-                label_text = subj.tag
-                if is_player_subject and subj.subject_data:
-                    label_text += f"\n+{len(subj.subject_data)}"
+                subj_val = get_subject_value(subj)
+                if is_player_subject:
+                    # Player subjects show tag + value + subject count
+                    label_text = f"{subj.tag}\n{subj_val:,.0f}"
+                    if subj.subject_data:
+                        label_text += f"\n(+{len(subj.subject_data)})"
+                else:
+                    label_text = subj.tag
                 ax.text(sx + sw / 2, label_y, label_text,
                        ha='center', va='center', fontsize=fontsize, color='white',
                        fontweight='bold' if is_player_subject else 'normal')
