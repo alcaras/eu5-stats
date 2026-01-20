@@ -570,8 +570,11 @@ def simple_treemap(ax, sizes, labels, colors, title):
         horizontal = not horizontal
 
 
-def nested_treemap_with_subjects(ax, countries, color_map, get_country_value, get_subject_value, title):
-    """Create a treemap with nested subject boxes inside each country's box using squarify."""
+def nested_treemap_with_subjects(ax, countries, color_map, get_country_value, get_subject_value, title, player_tags=None):
+    """Create a treemap with nested subject boxes inside each country's box using squarify.
+
+    Player-controlled subjects get their own color and show their own subjects nested inside.
+    """
     import matplotlib.patches as mpatches
 
     try:
@@ -580,14 +583,26 @@ def nested_treemap_with_subjects(ax, countries, color_map, get_country_value, ge
         ax.text(0.5, 0.5, "squarify not installed", ha='center', va='center')
         return
 
-    # Build data: (country, own_value, subject_values, total_value)
+    if player_tags is None:
+        player_tags = set()
+    else:
+        player_tags = set(player_tags)
+
+    # Build subject lookup by tag for player-controlled subjects
+    subject_lookup = {c.tag: c for c in countries}
+    for c in countries:
+        for s in c.subject_data:
+            subject_lookup[s.tag] = s
+
+    # Build data: (country, own_value, subject_data_list, total_value)
     data = []
     for c in countries:
         country_val = get_country_value(c)
-        subject_vals = [(s.tag, get_subject_value(s)) for s in c.subject_data if get_subject_value(s) > 0]
-        total_val = country_val + sum(sv for _, sv in subject_vals)
+        # Get subject stats objects, not just (tag, value) tuples
+        subject_list = [(s, get_subject_value(s)) for s in c.subject_data if get_subject_value(s) > 0]
+        total_val = country_val + sum(sv for _, sv in subject_list)
         if total_val > 0:
-            data.append((c, country_val, subject_vals, total_val))
+            data.append((c, country_val, subject_list, total_val))
 
     if not data:
         return
@@ -604,7 +619,65 @@ def nested_treemap_with_subjects(ax, countries, color_map, get_country_value, ge
     ax.axis('off')
     ax.set_title(title, fontsize=14, fontweight='bold')
 
-    for i, (c, country_val, subject_vals, total_val) in enumerate(data):
+    def draw_subjects_in_box(subjects_with_vals, box_x, box_y, box_w, box_h, parent_color, depth=0):
+        """Recursively draw subjects in a box. Player subjects get own color and show their subjects."""
+        if not subjects_with_vals or box_w < 3 or box_h < 3:
+            return
+
+        subj_sizes = [sv for _, sv in sorted(subjects_with_vals, key=lambda x: x[1], reverse=True)]
+        subj_objs = [s for s, _ in sorted(subjects_with_vals, key=lambda x: x[1], reverse=True)]
+
+        if not subj_sizes:
+            return
+
+        subj_rects = squarify.normalize_sizes(subj_sizes, box_w, box_h)
+        subj_rects = squarify.squarify(subj_rects, box_x, box_y, box_w, box_h)
+
+        for j, sr in enumerate(subj_rects):
+            if j >= len(subj_objs):
+                break
+            subj = subj_objs[j]
+            sx, sy, sw, sh = sr['x'], sr['y'], sr['dx'], sr['dy']
+
+            is_player_subject = subj.tag in player_tags
+
+            if is_player_subject:
+                # Player-controlled subject: use their own color
+                subj_color = color_map.get(subj.tag, (0.5, 0.5, 0.5))
+                border_width = 2
+            else:
+                # AI subject: darker shade of parent color
+                subj_color = (parent_color[0] * 0.5, parent_color[1] * 0.5, parent_color[2] * 0.5)
+                border_width = 1
+
+            subj_rect = mpatches.Rectangle((sx, sy), sw, sh,
+                                           facecolor=subj_color, edgecolor='white', linewidth=border_width)
+            ax.add_patch(subj_rect)
+
+            # If player subject has its own subjects, draw them nested (bottom 30% of their box)
+            if is_player_subject and subj.subject_data and sw > 5 and sh > 5:
+                nested_subjs = [(ns, get_subject_value(ns)) for ns in subj.subject_data if get_subject_value(ns) > 0]
+                if nested_subjs:
+                    nested_h = sh * 0.30
+                    draw_subjects_in_box(nested_subjs, sx, sy, sw, nested_h, subj_color, depth + 1)
+                    # Adjust label position for player subject with nested subjects
+                    label_y = sy + nested_h + (sh - nested_h) / 2
+                else:
+                    label_y = sy + sh / 2
+            else:
+                label_y = sy + sh / 2
+
+            # Label if big enough
+            if sw > 4 and sh > 3:
+                fontsize = 8 if is_player_subject else 7
+                label_text = subj.tag
+                if is_player_subject and subj.subject_data:
+                    label_text += f"\n+{len(subj.subject_data)}"
+                ax.text(sx + sw / 2, label_y, label_text,
+                       ha='center', va='center', fontsize=fontsize, color='white',
+                       fontweight='bold' if is_player_subject else 'normal')
+
+    for i, (c, country_val, subject_list, total_val) in enumerate(data):
         r = rects[i]
         x, y, w, h = r['x'], r['y'], r['dx'], r['dy']
         color = color_map.get(c.tag, (0.5, 0.5, 0.5))
@@ -614,42 +687,20 @@ def nested_treemap_with_subjects(ax, countries, color_map, get_country_value, ge
         ax.add_patch(rect)
 
         # Draw nested subjects inside (bottom portion)
-        if subject_vals and w > 5 and h > 5:
+        if subject_list and w > 5 and h > 5:
             # Subjects take bottom 25% of the box
             subj_height = h * 0.25
-            subj_y = y
-
-            # Use squarify for subject layout within the country box
-            subj_sizes = [sv for _, sv in sorted(subject_vals, key=lambda x: x[1], reverse=True)]
-            subj_tags = [st for st, _ in sorted(subject_vals, key=lambda x: x[1], reverse=True)]
-
-            if subj_sizes:
-                subj_rects = squarify.normalize_sizes(subj_sizes, w, subj_height)
-                subj_rects = squarify.squarify(subj_rects, x, subj_y, w, subj_height)
-
-                for j, sr in enumerate(subj_rects):
-                    if j >= len(subj_tags):
-                        break
-                    sx, sy, sw, sh = sr['x'], sr['y'], sr['dx'], sr['dy']
-                    # Darker shade for subjects
-                    subj_color = (color[0] * 0.5, color[1] * 0.5, color[2] * 0.5)
-                    subj_rect = mpatches.Rectangle((sx, sy), sw, sh,
-                                                   facecolor=subj_color, edgecolor='white', linewidth=1)
-                    ax.add_patch(subj_rect)
-                    # Label if big enough
-                    if sw > 4 and sh > 3:
-                        ax.text(sx + sw / 2, sy + sh / 2, subj_tags[j],
-                               ha='center', va='center', fontsize=7, color='white')
+            draw_subjects_in_box(subject_list, x, y, w, subj_height, color)
 
         # Main label (centered in upper portion if subjects, else centered)
-        if subject_vals:
+        if subject_list:
             cx, cy = x + w / 2, y + h * 0.25 + (h * 0.75) / 2
         else:
             cx, cy = x + w / 2, y + h / 2
 
         label = f"{c.tag}\n{total_val:,.0f}"
-        if subject_vals:
-            label += f"\n(+{len(subject_vals)})"
+        if subject_list:
+            label += f"\n(+{len(subject_list)})"
 
         # Adjust font size based on box size
         fontsize = min(12, max(8, int(min(w, h) / 8)))
@@ -734,12 +785,16 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
 
     # === TREEMAP CHARTS (with subjects) ===
 
+    # Get all player tags for identifying player-controlled subjects
+    player_tag_set = set(c.tag for c in countries)
+
     # Treemap: Population with Subjects
     fig, ax = plt.subplots(figsize=(14, 10))
     countries_sorted = sorted(independent_countries, key=lambda c: c.total_population, reverse=True)
     nested_treemap_with_subjects(ax, countries_sorted, color_map,
                                 lambda c: c.population, lambda s: s.population,
-                                f'{chart_num}. Population (with Subjects)')
+                                f'{chart_num}. Population (with Subjects)',
+                                player_tags=player_tag_set)
     plt.tight_layout()
     plt.savefig(save_dir / f'{chart_num:02d}_treemap_population.png', dpi=150)
     print(f"  Saved: {chart_num:02d}_treemap_population.png")
@@ -751,7 +806,8 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
     countries_sorted = sorted(independent_countries, key=lambda c: c.total_tax_base, reverse=True)
     nested_treemap_with_subjects(ax, countries_sorted, color_map,
                                 lambda c: c.current_tax_base, lambda s: s.current_tax_base,
-                                f'{chart_num}. Tax Base (with Subjects)')
+                                f'{chart_num}. Tax Base (with Subjects)',
+                                player_tags=player_tag_set)
     plt.tight_layout()
     plt.savefig(save_dir / f'{chart_num:02d}_treemap_taxbase.png', dpi=150)
     print(f"  Saved: {chart_num:02d}_treemap_taxbase.png")
@@ -763,7 +819,8 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
     countries_sorted = sorted(independent_countries, key=lambda c: c.num_subunits + sum(s.num_subunits for s in c.subject_data), reverse=True)
     nested_treemap_with_subjects(ax, countries_sorted, color_map,
                                 lambda c: c.num_subunits, lambda s: s.num_subunits,
-                                f'{chart_num}. Military Regiments (with Subjects)')
+                                f'{chart_num}. Military Regiments (with Subjects)',
+                                player_tags=player_tag_set)
     plt.tight_layout()
     plt.savefig(save_dir / f'{chart_num:02d}_treemap_military.png', dpi=150)
     print(f"  Saved: {chart_num:02d}_treemap_military.png")
@@ -775,7 +832,8 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
     countries_sorted = sorted(independent_countries, key=lambda c: c.max_manpower + sum(s.max_manpower for s in c.subject_data), reverse=True)
     nested_treemap_with_subjects(ax, countries_sorted, color_map,
                                 lambda c: c.max_manpower, lambda s: s.max_manpower,
-                                f'{chart_num}. Manpower (with Subjects)')
+                                f'{chart_num}. Manpower (with Subjects)',
+                                player_tags=player_tag_set)
     plt.tight_layout()
     plt.savefig(save_dir / f'{chart_num:02d}_treemap_manpower.png', dpi=150)
     print(f"  Saved: {chart_num:02d}_treemap_manpower.png")
