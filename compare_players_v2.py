@@ -101,6 +101,14 @@ class CountryStats:
     historical_tax_base: list = field(default_factory=list)
     monthly_gold: list = field(default_factory=list)
 
+    # Subjects
+    subjects: list = field(default_factory=list)  # List of subject tags
+    subject_data: list = field(default_factory=list)  # List of CountryStats for subjects
+    total_population: float = 0.0  # Self + subjects
+    total_tax_base: float = 0.0  # Self + subjects
+    combined_historical_population: list = field(default_factory=list)  # Self + subjects over time
+    combined_historical_tax_base: list = field(default_factory=list)  # Self + subjects over time
+
 
 def extract_value(text: str, pattern: str, cast=str, default=None):
     match = re.search(pattern, text)
@@ -164,6 +172,104 @@ def extract_dict(text: str, key: str) -> dict:
                 result[k] = False
             else:
                 result[k] = v
+    return result
+
+
+def extract_country_tags(filepath: str) -> dict[int, str]:
+    """Extract country ID -> tag mapping from countries.tags section."""
+    tags = {}
+    with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+        in_countries = False
+        in_tags = False
+        for line in f:
+            if not in_countries:
+                if line.strip().startswith('countries='):
+                    in_countries = True
+                continue
+            if not in_tags:
+                if line.strip().startswith('tags='):
+                    in_tags = True
+                continue
+            stripped = line.strip()
+            if stripped == '}':
+                break
+            match = re.match(r'(\d+)=(\w+)', stripped)
+            if match:
+                tags[int(match.group(1))] = match.group(2)
+    return tags
+
+
+def extract_dependencies(filepath: str) -> dict[int, list[tuple[int, str]]]:
+    """Extract all subject/dependency relationships from diplomacy_manager."""
+    dependencies = {}
+    with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+        in_diplomacy = False
+        in_dependency = False
+        current_first = None
+        current_second = None
+        current_type = None
+
+        for line in f:
+            stripped = line.strip()
+
+            if not in_diplomacy:
+                if line.startswith('diplomacy_manager={'):
+                    in_diplomacy = True
+                continue
+
+            if stripped == 'dependency={':
+                in_dependency = True
+                current_first = None
+                current_second = None
+                current_type = None
+                continue
+
+            if in_dependency:
+                if stripped.startswith('first='):
+                    try:
+                        current_first = int(stripped.split('=')[1])
+                    except ValueError:
+                        pass
+                elif stripped.startswith('second='):
+                    try:
+                        current_second = int(stripped.split('=')[1])
+                    except ValueError:
+                        pass
+                elif stripped.startswith('subject_type='):
+                    current_type = stripped.split('=')[1]
+
+                if stripped == '}':
+                    if current_first is not None and current_second is not None and current_type:
+                        if current_first not in dependencies:
+                            dependencies[current_first] = []
+                        dependencies[current_first].append((current_second, current_type))
+                    in_dependency = False
+
+            if line.startswith('}') and in_diplomacy and not in_dependency:
+                break
+
+    return dependencies
+
+
+def get_subjects_for_countries(filepath: str, player_tags: list[str]) -> dict[str, list[str]]:
+    """Get all subject country tags for each player country."""
+    id_to_tag = extract_country_tags(filepath)
+    tag_to_id = {v: k for k, v in id_to_tag.items()}
+    dependencies = extract_dependencies(filepath)
+
+    result = {}
+    for tag in player_tags:
+        overlord_id = tag_to_id.get(tag)
+        if overlord_id is not None and overlord_id in dependencies:
+            subject_tags = []
+            for subject_id, subject_type in dependencies[overlord_id]:
+                subject_tag = id_to_tag.get(subject_id)
+                if subject_tag:
+                    subject_tags.append(subject_tag)
+            result[tag] = subject_tags
+        else:
+            result[tag] = []
+
     return result
 
 
@@ -464,6 +570,121 @@ def simple_treemap(ax, sizes, labels, colors, title):
         horizontal = not horizontal
 
 
+def nested_treemap_with_subjects(ax, countries, color_map, get_country_value, get_subject_value, title):
+    """Create a treemap with nested subject boxes inside each country's box."""
+    import matplotlib.patches as mpatches
+
+    # Filter and sort by total value (country + subjects)
+    data = []
+    for c in countries:
+        country_val = get_country_value(c)
+        subject_vals = [(s.tag, get_subject_value(s)) for s in c.subject_data if get_subject_value(s) > 0]
+        total_val = country_val + sum(sv for _, sv in subject_vals)
+        if total_val > 0:
+            data.append((c, country_val, subject_vals, total_val))
+
+    if not data:
+        return
+
+    data.sort(key=lambda x: x[3], reverse=True)
+
+    total = sum(d[3] for d in data)
+
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    ax.set_title(title, fontsize=14, fontweight='bold')
+
+    x, y = 0, 0
+    width, height = 1, 1
+    horizontal = True
+
+    for c, country_val, subject_vals, total_val in data:
+        normed = total_val / total
+        color = color_map.get(c.tag, (0.5, 0.5, 0.5))
+
+        if horizontal:
+            rect_width = normed * width / (sum(d[3] for d in data[data.index((c, country_val, subject_vals, total_val)):]) / total) if total > 0 else 0
+            rect_width = min(rect_width, width)
+            rect_height = height
+
+            # Main country rectangle
+            rect = mpatches.Rectangle((x, y), rect_width, rect_height,
+                                       facecolor=color, edgecolor='white', linewidth=2)
+            ax.add_patch(rect)
+
+            # Draw subject boxes inside (stacked at bottom)
+            if subject_vals and rect_width > 0.05:
+                subj_y = y
+                subj_height = rect_height * 0.3  # Subjects take 30% of height
+                subj_total = sum(sv for _, sv in subject_vals)
+                subj_x = x
+                for subj_tag, subj_val in sorted(subject_vals, key=lambda x: x[1], reverse=True)[:5]:  # Max 5 subjects shown
+                    if subj_total > 0:
+                        subj_width = (subj_val / subj_total) * rect_width
+                        # Darker shade for subjects
+                        subj_color = (color[0] * 0.6, color[1] * 0.6, color[2] * 0.6)
+                        subj_rect = mpatches.Rectangle((subj_x, subj_y), subj_width, subj_height,
+                                                       facecolor=subj_color, edgecolor='white', linewidth=1)
+                        ax.add_patch(subj_rect)
+                        if subj_width > 0.03:
+                            ax.text(subj_x + subj_width / 2, subj_y + subj_height / 2,
+                                   subj_tag, ha='center', va='center', fontsize=7, color='white')
+                        subj_x += subj_width
+
+            # Main label
+            cx, cy = x + rect_width / 2, y + rect_height / 2 + (0.1 if subject_vals else 0)
+            label = f"{c.tag}\n{total_val:,.0f}"
+            if subject_vals:
+                label += f"\n(+{len(subject_vals)} subj)"
+            ax.text(cx, cy, label, ha='center', va='center',
+                    fontsize=10, fontweight='bold', color='white',
+                    bbox=dict(boxstyle='round', facecolor='black', alpha=0.3))
+
+            x += rect_width
+            width -= rect_width
+        else:
+            rect_width = width
+            rect_height = normed * height / (sum(d[3] for d in data[data.index((c, country_val, subject_vals, total_val)):]) / total) if total > 0 else 0
+            rect_height = min(rect_height, height)
+
+            rect = mpatches.Rectangle((x, y), rect_width, rect_height,
+                                       facecolor=color, edgecolor='white', linewidth=2)
+            ax.add_patch(rect)
+
+            # Draw subject boxes
+            if subject_vals and rect_height > 0.05:
+                subj_x = x
+                subj_width = rect_width * 0.3
+                subj_total = sum(sv for _, sv in subject_vals)
+                subj_y = y
+                for subj_tag, subj_val in sorted(subject_vals, key=lambda x: x[1], reverse=True)[:5]:
+                    if subj_total > 0:
+                        subj_h = (subj_val / subj_total) * rect_height
+                        subj_color = (color[0] * 0.6, color[1] * 0.6, color[2] * 0.6)
+                        subj_rect = mpatches.Rectangle((subj_x, subj_y), subj_width, subj_h,
+                                                       facecolor=subj_color, edgecolor='white', linewidth=1)
+                        ax.add_patch(subj_rect)
+                        if subj_h > 0.03:
+                            ax.text(subj_x + subj_width / 2, subj_y + subj_h / 2,
+                                   subj_tag, ha='center', va='center', fontsize=7, color='white')
+                        subj_y += subj_h
+
+            cx, cy = x + rect_width / 2, y + rect_height / 2
+            label = f"{c.tag}\n{total_val:,.0f}"
+            if subject_vals:
+                label += f"\n(+{len(subject_vals)} subj)"
+            ax.text(cx, cy, label, ha='center', va='center',
+                    fontsize=10, fontweight='bold', color='white',
+                    bbox=dict(boxstyle='round', facecolor='black', alpha=0.3))
+
+            y += rect_height
+            height -= rect_height
+
+        horizontal = not horizontal
+
+
 def create_graphs(countries: list[CountryStats], save_dir: Path):
     """Create charts and text reports."""
 
@@ -582,6 +803,84 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
     print(f"  Saved: {chart_num:02d}_treemap_manpower.png")
     plt.close()
     chart_num += 1
+
+    # === CHARTS WITH SUBJECTS ===
+    # Only generate if any country has subjects
+    has_subjects = any(len(c.subjects) > 0 for c in countries)
+
+    if has_subjects:
+        # Chart: Population + Subjects over time
+        countries_with_combined = [c for c in countries if c.combined_historical_population]
+        if countries_with_combined:
+            fig, ax = plt.subplots(figsize=(14, 7))
+            for c in countries_with_combined:
+                years = [start_year + i for i in range(len(c.combined_historical_population))]
+                pop_millions = [p / 1000 for p in c.combined_historical_population]
+                ax.plot(years, pop_millions, label=c.tag, linewidth=3, color=color_map[c.tag])
+                if years and pop_millions:
+                    label_text = c.tag if not c.subjects else f"{c.tag}+{len(c.subjects)}"
+                    ax.annotate(label_text, (years[-1], pop_millions[-1]), textcoords="offset points",
+                               xytext=(5, 0), ha='left', fontsize=9, fontweight='bold',
+                               color=color_map[c.tag])
+            ax.set_xlabel('Year')
+            ax.set_ylabel('Population (millions)')
+            ax.set_title(f'{chart_num}. Population + Subjects Over Time')
+            ax.legend(loc='upper left', fontsize=9)
+            ax.grid(True, alpha=0.3)
+            ax.margins(x=0.1)
+            plt.tight_layout()
+            plt.savefig(save_dir / f'{chart_num:02d}_population_with_subjects.png', dpi=150)
+            print(f"  Saved: {chart_num:02d}_population_with_subjects.png")
+            plt.close()
+            chart_num += 1
+
+        # Chart: Tax Base + Subjects over time
+        countries_with_combined_tax = [c for c in countries if c.combined_historical_tax_base]
+        if countries_with_combined_tax:
+            fig, ax = plt.subplots(figsize=(14, 7))
+            for c in countries_with_combined_tax:
+                years = [start_year + i for i in range(len(c.combined_historical_tax_base))]
+                ax.plot(years, c.combined_historical_tax_base, label=c.tag, linewidth=3, color=color_map[c.tag])
+                if years and c.combined_historical_tax_base:
+                    label_text = c.tag if not c.subjects else f"{c.tag}+{len(c.subjects)}"
+                    ax.annotate(label_text, (years[-1], c.combined_historical_tax_base[-1]), textcoords="offset points",
+                               xytext=(5, 0), ha='left', fontsize=9, fontweight='bold',
+                               color=color_map[c.tag])
+            ax.set_xlabel('Year')
+            ax.set_ylabel('Tax Base')
+            ax.set_title(f'{chart_num}. Tax Base + Subjects Over Time')
+            ax.legend(loc='upper left', fontsize=9)
+            ax.grid(True, alpha=0.3)
+            ax.margins(x=0.1)
+            plt.tight_layout()
+            plt.savefig(save_dir / f'{chart_num:02d}_taxbase_with_subjects.png', dpi=150)
+            print(f"  Saved: {chart_num:02d}_taxbase_with_subjects.png")
+            plt.close()
+            chart_num += 1
+
+        # Nested Treemap: Population + Subjects
+        fig, ax = plt.subplots(figsize=(14, 10))
+        countries_sorted = sorted(countries, key=lambda c: c.total_population, reverse=True)
+        nested_treemap_with_subjects(ax, countries_sorted, color_map,
+                                    lambda c: c.population, lambda s: s.population,
+                                    f'{chart_num}. Population Treemap with Subjects (thousands)')
+        plt.tight_layout()
+        plt.savefig(save_dir / f'{chart_num:02d}_treemap_population_subjects.png', dpi=150)
+        print(f"  Saved: {chart_num:02d}_treemap_population_subjects.png")
+        plt.close()
+        chart_num += 1
+
+        # Nested Treemap: Tax Base + Subjects
+        fig, ax = plt.subplots(figsize=(14, 10))
+        countries_sorted = sorted(countries, key=lambda c: c.total_tax_base, reverse=True)
+        nested_treemap_with_subjects(ax, countries_sorted, color_map,
+                                    lambda c: c.current_tax_base, lambda s: s.current_tax_base,
+                                    f'{chart_num}. Tax Base Treemap with Subjects')
+        plt.tight_layout()
+        plt.savefig(save_dir / f'{chart_num:02d}_treemap_taxbase_subjects.png', dpi=150)
+        print(f"  Saved: {chart_num:02d}_treemap_taxbase_subjects.png")
+        plt.close()
+        chart_num += 1
 
     # === TEXT FILES ===
 
@@ -766,6 +1065,52 @@ def main():
             print("NOT FOUND")
 
     if countries:
+        # Extract subject relationships
+        print("  Finding subjects...", end=" ", flush=True)
+        subjects_map = get_subjects_for_countries(str(save_file), [c.tag for c in countries])
+
+        # Collect all unique subject tags
+        all_subject_tags = set()
+        for subj_list in subjects_map.values():
+            all_subject_tags.update(subj_list)
+
+        # Parse subject country data
+        subject_stats = {}
+        for subj_tag in all_subject_tags:
+            subj_text = find_country_in_file(str(save_file), subj_tag)
+            if subj_text:
+                subject_stats[subj_tag] = parse_country_block(subj_text, subj_tag)
+
+        # Attach subjects to their overlords and calculate combined time series
+        for c in countries:
+            c.subjects = subjects_map.get(c.tag, [])
+            c.subject_data = [subject_stats[t] for t in c.subjects if t in subject_stats]
+
+            # Calculate totals (self + subjects)
+            c.total_population = c.population + sum(s.population for s in c.subject_data)
+            c.total_tax_base = c.current_tax_base + sum(s.current_tax_base for s in c.subject_data)
+
+            # Calculate combined historical data
+            if c.historical_population:
+                combined_pop = list(c.historical_population)
+                for s in c.subject_data:
+                    if s.historical_population:
+                        # Align lengths and add
+                        for i in range(min(len(combined_pop), len(s.historical_population))):
+                            combined_pop[i] += s.historical_population[i]
+                c.combined_historical_population = combined_pop
+
+            if c.historical_tax_base:
+                combined_tax = list(c.historical_tax_base)
+                for s in c.subject_data:
+                    if s.historical_tax_base:
+                        for i in range(min(len(combined_tax), len(s.historical_tax_base))):
+                            combined_tax[i] += s.historical_tax_base[i]
+                c.combined_historical_tax_base = combined_tax
+
+        total_subjects = sum(len(c.subjects) for c in countries)
+        print(f"OK ({total_subjects} subjects)")
+
         print_comparison(countries)
         create_graphs(countries, output_dir)
 

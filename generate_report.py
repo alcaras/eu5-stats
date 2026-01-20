@@ -109,6 +109,14 @@ class CountryStats:
     historical_population: list = field(default_factory=list)
     historical_tax_base: list = field(default_factory=list)
 
+    # Subjects
+    subjects: list = field(default_factory=list)  # List of subject tags
+    subject_data: list = field(default_factory=list)  # List of CountryStats for subjects
+    total_population: float = 0.0  # Self + subjects
+    total_tax_base: float = 0.0  # Self + subjects
+    total_regiments: int = 0  # Self + subjects
+    total_manpower: float = 0.0  # Self + subjects
+
 
 def extract_value(text: str, pattern: str, cast=str, default=None):
     match = re.search(pattern, text)
@@ -486,6 +494,91 @@ def calculate_average_control(filepath: str, player_tags: list[str]) -> dict[str
     return result
 
 
+def extract_dependencies(filepath: str) -> dict[int, list[tuple[int, str]]]:
+    """Extract all subject/dependency relationships from diplomacy_manager.
+
+    Returns dict mapping overlord_id -> [(subject_id, subject_type), ...]
+    """
+    dependencies = {}
+    with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+        in_diplomacy = False
+        in_dependency = False
+        current_first = None
+        current_second = None
+        current_type = None
+
+        for line in f:
+            stripped = line.strip()
+
+            # Find diplomacy_manager section
+            if not in_diplomacy:
+                if line.startswith('diplomacy_manager={'):
+                    in_diplomacy = True
+                continue
+
+            # Look for dependency blocks
+            if stripped == 'dependency={':
+                in_dependency = True
+                current_first = None
+                current_second = None
+                current_type = None
+                continue
+
+            if in_dependency:
+                if stripped.startswith('first='):
+                    try:
+                        current_first = int(stripped.split('=')[1])
+                    except ValueError:
+                        pass
+                elif stripped.startswith('second='):
+                    try:
+                        current_second = int(stripped.split('=')[1])
+                    except ValueError:
+                        pass
+                elif stripped.startswith('subject_type='):
+                    current_type = stripped.split('=')[1]
+
+                # End of dependency block
+                if stripped == '}':
+                    if current_first is not None and current_second is not None and current_type:
+                        if current_first not in dependencies:
+                            dependencies[current_first] = []
+                        dependencies[current_first].append((current_second, current_type))
+                    in_dependency = False
+
+            # Stop at end of diplomacy_manager section
+            if line.startswith('}') and in_diplomacy and not in_dependency:
+                break
+
+    return dependencies
+
+
+def get_subjects_for_countries(filepath: str, player_tags: list[str]) -> dict[str, list[str]]:
+    """Get all subject country tags for each player country.
+
+    Returns dict mapping player_tag -> [subject_tag, ...]
+    """
+    id_to_tag = extract_country_tags(filepath)
+    tag_to_id = {v: k for k, v in id_to_tag.items()}
+
+    dependencies = extract_dependencies(filepath)
+
+    result = {}
+    for tag in player_tags:
+        overlord_id = tag_to_id.get(tag)
+        if overlord_id is not None and overlord_id in dependencies:
+            subject_tags = []
+            for subject_id, subject_type in dependencies[overlord_id]:
+                subject_tag = id_to_tag.get(subject_id)
+                if subject_tag:
+                    subject_tags.append(subject_tag)
+            result[tag] = subject_tags
+        else:
+            result[tag] = []
+
+    return result
+
+
 def fmt_pop(val: float) -> str:
     """Population in millions."""
     return f"{val/1000:.2f}M" if val >= 100 else f"{val:.1f}K"
@@ -646,6 +739,27 @@ def generate_summary_report(countries: list[CountryStats], save_date: str) -> st
     for c in by_control:
         lines.append(f"{c.tag:<5}{c.average_control:<10.1f}{c.num_provinces:<7}")
     lines.append("")
+
+    # === SUBJECTS ===
+    # Only show if any country has subjects
+    has_subjects = any(len(c.subjects) > 0 for c in countries)
+    if has_subjects:
+        lines.append("=" * W)
+        lines.append("SUBJECTS (with combined totals)")
+        lines.append("-" * W)
+        lines.append(f"{'Tag':<5}{'#':<3}{'Subjects':<20}{'TotPop':<9}{'TotTax':<9}")
+        lines.append("-" * W)
+
+        by_subjects = sorted(countries, key=lambda c: len(c.subjects), reverse=True)
+        for c in by_subjects:
+            if c.subjects:
+                subj_str = ",".join(c.subjects[:4])
+                if len(c.subjects) > 4:
+                    subj_str += "..."
+                lines.append(f"{c.tag:<5}{len(c.subjects):<3}{subj_str:<20}{fmt_pop(c.total_population):<9}{fmt_num(c.total_tax_base):<9}")
+            else:
+                lines.append(f"{c.tag:<5}{0:<3}{'-':<20}{fmt_pop(c.population):<9}{fmt_num(c.current_tax_base):<9}")
+        lines.append("")
 
     # === SOCIETAL VALUES - Compact ===
     lines.append("=" * W)
@@ -1044,6 +1158,36 @@ def main():
         for c in countries:
             c.average_control = control_data.get(c.tag, 0.0)
         print("OK", file=sys.stderr)
+
+        # Extract subject relationships
+        print("  Finding subjects...", file=sys.stderr, end=" ", flush=True)
+        subjects_map = get_subjects_for_countries(str(save_file), [c.tag for c in countries])
+
+        # Parse subject country data
+        all_subject_tags = set()
+        for subj_list in subjects_map.values():
+            all_subject_tags.update(subj_list)
+
+        subject_stats = {}
+        for subj_tag in all_subject_tags:
+            subj_text = find_country_in_file(str(save_file), subj_tag)
+            if subj_text:
+                subject_stats[subj_tag] = parse_country(subj_text, subj_tag)
+
+        # Attach subjects to their overlords and calculate totals
+        for c in countries:
+            c.subjects = subjects_map.get(c.tag, [])
+            c.subject_data = [subject_stats[t] for t in c.subjects if t in subject_stats]
+
+            # Calculate totals (self + subjects)
+            c.total_population = c.population + sum(s.population for s in c.subject_data)
+            c.total_tax_base = c.current_tax_base + sum(s.current_tax_base for s in c.subject_data)
+            c.total_regiments = c.num_subunits + sum(s.num_subunits for s in c.subject_data)
+            c.total_manpower = c.max_manpower + sum(s.max_manpower for s in c.subject_data)
+
+        total_subjects = sum(len(c.subjects) for c in countries)
+        print(f"OK ({total_subjects} subjects found)", file=sys.stderr)
+
         # Write summary report (Discord-friendly)
         summary_file = report_dir / "session_summary.txt"
         with open(summary_file, 'w') as f:

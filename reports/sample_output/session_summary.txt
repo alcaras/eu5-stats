@@ -2,7 +2,7 @@
 EU5 MP SESSION REPORT
 =======================================================
 Save: 1433.1.1 | Players: 10
-Generated: 2026-01-19 11:41
+Generated: 2026-01-19 17:54
 
 =======================================================
 GREAT POWER RANKINGS
@@ -147,6 +147,22 @@ POL  25.9      43
 GBR  24.5      59     
 SER  19.4      40     
 TUR  16.6      39     
+
+=======================================================
+SUBJECTS (with combined totals)
+-------------------------------------------------------
+Tag  #  Subjects            TotPop   TotTax   
+-------------------------------------------------------
+MLO  39 PIS,SIE,AAA20,AAA69...7.82M    2,189    
+POL  34 PLK,ABA00,AAA34,AAA53...4.98M    904.5    
+SER  19 VID,AAA33,AAA16,AAA52...5.23M    847.5    
+BOH  18 SWB,ABA01,ABA02,ABA03...6.21M    2,468    
+FRA  17 BRI,AMG,COM,VLN...  9.52M    1,567    
+GBR  6  IRE,GWR,EWY,LOI...  5.30M    464.0    
+SKO  5  TEN,AAA99,ABA05,OYO...3.36M    152.0    
+SWE  3  AAA47,ABA15,ABA34   2.21M    205.5    
+TUR  3  ERE,ARM,TDJ         5.45M    414.5    
+IRE  1  DMS                 1.16M    149.5    
 
 =======================================================
 VALUES (cent/serf/arist/trad/spirit)
