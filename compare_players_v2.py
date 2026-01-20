@@ -674,26 +674,33 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
     start_year = 1337
     chart_num = 1
 
-    # === TIME SERIES CHARTS ===
+    # For treemaps: filter out player countries that are subjects of other player countries
+    # (they'll appear nested under their overlord, not as separate top-level entries)
+    all_player_subjects = set()
+    for c in countries:
+        all_player_subjects.update(c.subjects)
+    independent_countries = [c for c in countries if c.tag not in all_player_subjects]
 
-    # Chart 1: Population over time
-    if countries_with_pop:
+    # === TIME SERIES CHARTS (with subjects) ===
+
+    # Chart 1: Population over time (combined with subjects)
+    countries_with_combined = [c for c in countries if c.combined_historical_population]
+    if countries_with_combined:
         fig, ax = plt.subplots(figsize=(14, 7))
-        for c in countries_with_pop:
-            years = [start_year + i for i in range(len(c.historical_population))]
-            pop_millions = [p / 1000 for p in c.historical_population]
+        for c in countries_with_combined:
+            years = [start_year + i for i in range(len(c.combined_historical_population))]
+            pop_millions = [p / 1000 for p in c.combined_historical_population]
             ax.plot(years, pop_millions, label=c.tag, linewidth=3, color=color_map[c.tag])
-            # Add label at end of line
             if years and pop_millions:
-                ax.annotate(c.tag, (years[-1], pop_millions[-1]), textcoords="offset points",
+                label_text = c.tag if not c.subjects else f"{c.tag}+{len(c.subjects)}"
+                ax.annotate(label_text, (years[-1], pop_millions[-1]), textcoords="offset points",
                            xytext=(5, 0), ha='left', fontsize=9, fontweight='bold',
                            color=color_map[c.tag])
         ax.set_xlabel('Year')
         ax.set_ylabel('Population (millions)')
-        ax.set_title(f'{chart_num}. Population Over Time')
+        ax.set_title(f'{chart_num}. Population Over Time (with Subjects)')
         ax.legend(loc='upper left', fontsize=9)
         ax.grid(True, alpha=0.3)
-        # Add margin on right for labels
         ax.margins(x=0.1)
         plt.tight_layout()
         plt.savefig(save_dir / f'{chart_num:02d}_population_history.png', dpi=150)
@@ -701,20 +708,21 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
         plt.close()
         chart_num += 1
 
-    # Chart 2: Tax Base over time
-    if countries_with_tax:
+    # Chart 2: Tax Base over time (combined with subjects)
+    countries_with_combined_tax = [c for c in countries if c.combined_historical_tax_base]
+    if countries_with_combined_tax:
         fig, ax = plt.subplots(figsize=(14, 7))
-        for c in countries_with_tax:
-            years = [start_year + i for i in range(len(c.historical_tax_base))]
-            ax.plot(years, c.historical_tax_base, label=c.tag, linewidth=3, color=color_map[c.tag])
-            # Add label at end of line
-            if years and c.historical_tax_base:
-                ax.annotate(c.tag, (years[-1], c.historical_tax_base[-1]), textcoords="offset points",
+        for c in countries_with_combined_tax:
+            years = [start_year + i for i in range(len(c.combined_historical_tax_base))]
+            ax.plot(years, c.combined_historical_tax_base, label=c.tag, linewidth=3, color=color_map[c.tag])
+            if years and c.combined_historical_tax_base:
+                label_text = c.tag if not c.subjects else f"{c.tag}+{len(c.subjects)}"
+                ax.annotate(label_text, (years[-1], c.combined_historical_tax_base[-1]), textcoords="offset points",
                            xytext=(5, 0), ha='left', fontsize=9, fontweight='bold',
                            color=color_map[c.tag])
         ax.set_xlabel('Year')
         ax.set_ylabel('Tax Base')
-        ax.set_title(f'{chart_num}. Tax Base Over Time')
+        ax.set_title(f'{chart_num}. Tax Base Over Time (with Subjects)')
         ax.legend(loc='upper left', fontsize=9)
         ax.grid(True, alpha=0.3)
         ax.margins(x=0.1)
@@ -724,144 +732,55 @@ def create_graphs(countries: list[CountryStats], save_dir: Path):
         plt.close()
         chart_num += 1
 
-    # === TREEMAP CHARTS ===
+    # === TREEMAP CHARTS (with subjects) ===
 
-    # Treemap 4: Population
-    fig, ax = plt.subplots(figsize=(12, 8))
-    countries_sorted = sorted(countries, key=lambda c: c.population, reverse=True)
-    sizes = [c.population for c in countries_sorted]
-    labels = [c.tag for c in countries_sorted]
-    colors = [color_map[c.tag] for c in countries_sorted]
-    simple_treemap(ax, sizes, labels, colors, f'{chart_num}. Population Treemap (thousands)')
+    # Treemap: Population with Subjects
+    fig, ax = plt.subplots(figsize=(14, 10))
+    countries_sorted = sorted(independent_countries, key=lambda c: c.total_population, reverse=True)
+    nested_treemap_with_subjects(ax, countries_sorted, color_map,
+                                lambda c: c.population, lambda s: s.population,
+                                f'{chart_num}. Population (with Subjects)')
     plt.tight_layout()
     plt.savefig(save_dir / f'{chart_num:02d}_treemap_population.png', dpi=150)
     print(f"  Saved: {chart_num:02d}_treemap_population.png")
     plt.close()
     chart_num += 1
 
-    # Treemap 5: Tax Base
-    fig, ax = plt.subplots(figsize=(12, 8))
-    countries_sorted = sorted(countries, key=lambda c: c.current_tax_base, reverse=True)
-    sizes = [c.current_tax_base for c in countries_sorted]
-    labels = [c.tag for c in countries_sorted]
-    colors = [color_map[c.tag] for c in countries_sorted]
-    simple_treemap(ax, sizes, labels, colors, f'{chart_num}. Tax Base Treemap')
+    # Treemap: Tax Base with Subjects
+    fig, ax = plt.subplots(figsize=(14, 10))
+    countries_sorted = sorted(independent_countries, key=lambda c: c.total_tax_base, reverse=True)
+    nested_treemap_with_subjects(ax, countries_sorted, color_map,
+                                lambda c: c.current_tax_base, lambda s: s.current_tax_base,
+                                f'{chart_num}. Tax Base (with Subjects)')
     plt.tight_layout()
     plt.savefig(save_dir / f'{chart_num:02d}_treemap_taxbase.png', dpi=150)
     print(f"  Saved: {chart_num:02d}_treemap_taxbase.png")
     plt.close()
     chart_num += 1
 
-    # Treemap 6: Military (Regiments)
-    fig, ax = plt.subplots(figsize=(12, 8))
-    countries_sorted = sorted(countries, key=lambda c: c.num_subunits, reverse=True)
-    sizes = [c.num_subunits for c in countries_sorted]
-    labels = [c.tag for c in countries_sorted]
-    colors = [color_map[c.tag] for c in countries_sorted]
-    simple_treemap(ax, sizes, labels, colors, f'{chart_num}. Military Regiments Treemap')
+    # Treemap: Military (Regiments) with Subjects
+    fig, ax = plt.subplots(figsize=(14, 10))
+    countries_sorted = sorted(independent_countries, key=lambda c: c.num_subunits + sum(s.num_subunits for s in c.subject_data), reverse=True)
+    nested_treemap_with_subjects(ax, countries_sorted, color_map,
+                                lambda c: c.num_subunits, lambda s: s.num_subunits,
+                                f'{chart_num}. Military Regiments (with Subjects)')
     plt.tight_layout()
     plt.savefig(save_dir / f'{chart_num:02d}_treemap_military.png', dpi=150)
     print(f"  Saved: {chart_num:02d}_treemap_military.png")
     plt.close()
     chart_num += 1
 
-    # Treemap 7: Manpower
-    fig, ax = plt.subplots(figsize=(12, 8))
-    countries_sorted = sorted(countries, key=lambda c: c.manpower, reverse=True)
-    sizes = [c.manpower for c in countries_sorted]
-    labels = [c.tag for c in countries_sorted]
-    colors = [color_map[c.tag] for c in countries_sorted]
-    simple_treemap(ax, sizes, labels, colors, f'{chart_num}. Manpower Treemap')
+    # Treemap: Manpower with Subjects
+    fig, ax = plt.subplots(figsize=(14, 10))
+    countries_sorted = sorted(independent_countries, key=lambda c: c.max_manpower + sum(s.max_manpower for s in c.subject_data), reverse=True)
+    nested_treemap_with_subjects(ax, countries_sorted, color_map,
+                                lambda c: c.max_manpower, lambda s: s.max_manpower,
+                                f'{chart_num}. Manpower (with Subjects)')
     plt.tight_layout()
     plt.savefig(save_dir / f'{chart_num:02d}_treemap_manpower.png', dpi=150)
     print(f"  Saved: {chart_num:02d}_treemap_manpower.png")
     plt.close()
     chart_num += 1
-
-    # === CHARTS WITH SUBJECTS ===
-    # Only generate if any country has subjects
-    has_subjects = any(len(c.subjects) > 0 for c in countries)
-
-    if has_subjects:
-        # For treemaps: filter out player countries that are subjects of other player countries
-        # (they'll appear nested under their overlord, not as separate top-level entries)
-        all_player_subjects = set()
-        for c in countries:
-            all_player_subjects.update(c.subjects)
-        independent_countries = [c for c in countries if c.tag not in all_player_subjects]
-
-        # Chart: Population + Subjects over time (show ALL players, including vassalized ones)
-        countries_with_combined = [c for c in countries if c.combined_historical_population]
-        if countries_with_combined:
-            fig, ax = plt.subplots(figsize=(14, 7))
-            for c in countries_with_combined:
-                years = [start_year + i for i in range(len(c.combined_historical_population))]
-                pop_millions = [p / 1000 for p in c.combined_historical_population]
-                ax.plot(years, pop_millions, label=c.tag, linewidth=3, color=color_map[c.tag])
-                if years and pop_millions:
-                    label_text = c.tag if not c.subjects else f"{c.tag}+{len(c.subjects)}"
-                    ax.annotate(label_text, (years[-1], pop_millions[-1]), textcoords="offset points",
-                               xytext=(5, 0), ha='left', fontsize=9, fontweight='bold',
-                               color=color_map[c.tag])
-            ax.set_xlabel('Year')
-            ax.set_ylabel('Population (millions)')
-            ax.set_title(f'{chart_num}. Population + Subjects Over Time')
-            ax.legend(loc='upper left', fontsize=9)
-            ax.grid(True, alpha=0.3)
-            ax.margins(x=0.1)
-            plt.tight_layout()
-            plt.savefig(save_dir / f'{chart_num:02d}_population_with_subjects.png', dpi=150)
-            print(f"  Saved: {chart_num:02d}_population_with_subjects.png")
-            plt.close()
-            chart_num += 1
-
-        # Chart: Tax Base + Subjects over time (show ALL players, including vassalized ones)
-        countries_with_combined_tax = [c for c in countries if c.combined_historical_tax_base]
-        if countries_with_combined_tax:
-            fig, ax = plt.subplots(figsize=(14, 7))
-            for c in countries_with_combined_tax:
-                years = [start_year + i for i in range(len(c.combined_historical_tax_base))]
-                ax.plot(years, c.combined_historical_tax_base, label=c.tag, linewidth=3, color=color_map[c.tag])
-                if years and c.combined_historical_tax_base:
-                    label_text = c.tag if not c.subjects else f"{c.tag}+{len(c.subjects)}"
-                    ax.annotate(label_text, (years[-1], c.combined_historical_tax_base[-1]), textcoords="offset points",
-                               xytext=(5, 0), ha='left', fontsize=9, fontweight='bold',
-                               color=color_map[c.tag])
-            ax.set_xlabel('Year')
-            ax.set_ylabel('Tax Base')
-            ax.set_title(f'{chart_num}. Tax Base + Subjects Over Time')
-            ax.legend(loc='upper left', fontsize=9)
-            ax.grid(True, alpha=0.3)
-            ax.margins(x=0.1)
-            plt.tight_layout()
-            plt.savefig(save_dir / f'{chart_num:02d}_taxbase_with_subjects.png', dpi=150)
-            print(f"  Saved: {chart_num:02d}_taxbase_with_subjects.png")
-            plt.close()
-            chart_num += 1
-
-        # Nested Treemap: Population + Subjects (only independent players, vassalized ones appear nested)
-        fig, ax = plt.subplots(figsize=(14, 10))
-        countries_sorted = sorted(independent_countries, key=lambda c: c.total_population, reverse=True)
-        nested_treemap_with_subjects(ax, countries_sorted, color_map,
-                                    lambda c: c.population, lambda s: s.population,
-                                    f'{chart_num}. Population Treemap with Subjects (thousands)')
-        plt.tight_layout()
-        plt.savefig(save_dir / f'{chart_num:02d}_treemap_population_subjects.png', dpi=150)
-        print(f"  Saved: {chart_num:02d}_treemap_population_subjects.png")
-        plt.close()
-        chart_num += 1
-
-        # Nested Treemap: Tax Base + Subjects (only independent players, vassalized ones appear nested)
-        fig, ax = plt.subplots(figsize=(14, 10))
-        countries_sorted = sorted(independent_countries, key=lambda c: c.total_tax_base, reverse=True)
-        nested_treemap_with_subjects(ax, countries_sorted, color_map,
-                                    lambda c: c.current_tax_base, lambda s: s.current_tax_base,
-                                    f'{chart_num}. Tax Base Treemap with Subjects')
-        plt.tight_layout()
-        plt.savefig(save_dir / f'{chart_num:02d}_treemap_taxbase_subjects.png', dpi=150)
-        print(f"  Saved: {chart_num:02d}_treemap_taxbase_subjects.png")
-        plt.close()
-        chart_num += 1
 
     # === TEXT FILES ===
 
