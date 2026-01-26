@@ -18,16 +18,22 @@ This generates all reports and charts in a timestamped folder under `reports/`.
 
 ## Player Countries
 
-Edit `PLAYER_COUNTRIES` dict in `generate_report.py` and `compare_players_v2.py`:
+Edit `HUMANS.txt` in the project root, one player per line:
 
-```python
-PLAYER_COUNTRIES = {
-    'GBR': 'Great Britain',
-    'POL': 'Poland',
-    'FRA': 'France',
-    # ... etc
-}
 ```
+# Simple format - one tag per line
+FRA
+GBR
+SPA
+
+# For players who formed new nations, list all tags (space-separated)
+# The tool will find whichever tag exists in the save
+POL PLC        # Poland -> Poland-Lithuania Commonwealth
+MLO ITA        # Milan -> Italy
+BRA MUG        # Bahmani -> Mughals
+```
+
+The comparison report will automatically track players across tag changes and show the transition (e.g., "POL → PLC").
 
 Note: Use the country tag from the save file. For formed nations, check `flag=TAG` not `country_name`.
 
@@ -38,6 +44,7 @@ Note: Use the country tag from the save file. For formed nations, check `flag=TA
 - `country_details.txt` - Detailed profiles for each country with privileges by estate, reforms, all stats
 - `laws_comparison.txt` - Laws grouped by category showing which countries have which laws
 - `privileges_comparison.txt` - Privileges grouped by estate (Nobles, Clergy, Burghers, Peasants, Dhimmi, Tribes, General), shows which countries have each privilege, unique privileges per country
+- `comparison_report.txt` - Delta report comparing current vs previous save (only generated when 2+ saves exist). Shows changes in GP rank, population, tax base, income, treasury, military, manpower, tech, provinces, stability/prestige, and subjects. Handles tag changes (POL→PLC).
 
 ### Charts (numbered for Discord)
 - `01_population_history.png` - Population over time (thick lines with labels)

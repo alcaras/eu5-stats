@@ -3,40 +3,37 @@ TECHNOLOGY ADVANCES
 
 SUMMARY BY COUNTRY
 ----------------------------------------
-MLO  : 141 advances, 6 institutions
-GBR  : 141 advances, 6 institutions
-BOH  : 136 advances, 6 institutions
-POL  : 134 advances, 6 institutions
-FRA  : 133 advances, 6 institutions
-IRE  : 132 advances, 6 institutions
-SER  : 130 advances, 6 institutions
-SWE  : 130 advances, 5 institutions
-TUR  : 129 advances, 6 institutions
-SKO  : 105 advances, 4 institutions
+PLC  : 177 advances, 9 institutions
+ITA  : 174 advances, 9 institutions
+GBR  : 173 advances, 9 institutions
+FRA  : 169 advances, 9 institutions
+IRE  : 169 advances, 7 institutions
+BOH  : 168 advances, 9 institutions
+TUR  : 165 advances, 7 institutions
+SER  : 162 advances, 8 institutions
+SKO  : 142 advances, 6 institutions
 
 
 INSTITUTIONS BY COUNTRY
 ----------------------------------------
-MLO: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-GBR: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-BOH: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-POL: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-FRA: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-IRE: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-SER: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-SWE: professional_armies, banking, renaissance, legalism, feudalism
-TUR: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-SKO: professional_armies, renaissance, legalism, feudalism
+PLC: pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+ITA: pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+GBR: pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+FRA: pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+IRE: printing_press, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+BOH: pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+TUR: pike_and_shot, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+SER: pike_and_shot, printing_press, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+SKO: professional_armies, banking, renaissance, meritocracy, legalism, feudalism
 
 
 UNIQUE INSTITUTIONS (not shared by all)
 ----------------------------------------
-MLO has: meritocracy, banking
-GBR has: meritocracy, banking
-BOH has: meritocracy, banking
-POL has: meritocracy, banking
-FRA has: meritocracy, banking
-IRE has: meritocracy, banking
-SER has: meritocracy, banking
-SWE has: banking
-TUR has: meritocracy, banking
+PLC has: pike_and_shot, printing_press, new_world
+ITA has: pike_and_shot, printing_press, new_world
+GBR has: pike_and_shot, printing_press, new_world
+FRA has: pike_and_shot, printing_press, new_world
+IRE has: printing_press
+BOH has: pike_and_shot, printing_press, new_world
+TUR has: pike_and_shot
+SER has: printing_press, pike_and_shot

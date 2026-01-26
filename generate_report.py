@@ -15,22 +15,50 @@ from datetime import datetime
 SCRIPT_DIR = Path(__file__).parent.resolve()
 
 
-def load_human_countries() -> dict[str, str]:
-    """Load human-controlled countries from HUMANS.txt"""
+def load_human_countries() -> list[list[str]]:
+    """Load human-controlled countries from HUMANS.txt.
+
+    Each line can contain multiple tags (space-separated) representing
+    the same player's tag history (e.g., "POL PLC" for Poland -> Commonwealth).
+    Returns a list of tag-lists, where each inner list is one player's tags.
+    """
     humans_file = SCRIPT_DIR / "HUMANS.txt"
-    countries = {}
+    players = []
     if humans_file.exists():
         with open(humans_file, 'r') as f:
             for line in f:
                 line = line.strip()
                 if line and not line.startswith('#'):
-                    # Tag only, use tag as name
-                    countries[line] = line
-    return countries
+                    # Split by whitespace to get all tags for this player
+                    tags = line.split()
+                    if tags:
+                        players.append(tags)
+    return players
+
+
+def get_player_tag_in_file(filepath: str, player_tags: list[str]) -> str | None:
+    """Find which tag from a player's tag list exists in the save file.
+
+    Tries tags in reverse order (most recent formation first).
+    Returns the found tag or None.
+    """
+    for tag in reversed(player_tags):
+        # Quick check if tag exists in file
+        country_text = find_country_in_file(filepath, tag)
+        if country_text:
+            return tag
+    return None
 
 
 # Load player countries from config file
-PLAYER_COUNTRIES = load_human_countries()
+# PLAYER_TAGS is a list of tag-lists (one per player)
+PLAYER_TAGS = load_human_countries()
+
+# For backwards compatibility, also create flat dict of all tags
+PLAYER_COUNTRIES = {}
+for tags in PLAYER_TAGS:
+    for tag in tags:
+        PLAYER_COUNTRIES[tag] = tag
 
 RELIGION_NAMES = {
     12: 'Catholic', 13: 'Hussite', 18: 'Orthodox',
@@ -50,6 +78,17 @@ class CountryStats:
     ruler_dip: int = 0
     ruler_mil: int = 0
     ruler_traits: list = field(default_factory=list)
+    ruler_age: int = 0
+    ruler_birth_date: str = ""
+
+    # Regency
+    is_regency: bool = False
+    regent_id: int = 0
+    regent_name: str = ""
+    regent_adm: int = 0
+    regent_dip: int = 0
+    regent_mil: int = 0
+    regent_age: int = 0
 
     # Rank
     great_power_rank: int = 0
@@ -83,6 +122,7 @@ class CountryStats:
     # Tech
     num_researched_advances: int = 0
     institutions: list = field(default_factory=list)
+    research_progress: float = 0.0  # Current progress toward next advance
 
     # Government
     government_type: str = ""
@@ -176,6 +216,25 @@ def extract_nested_objects(text: str, key: str) -> list:
     return re.findall(r'object=(\w+)', block) if block else []
 
 
+def calculate_age(birth_date: str, current_date: str) -> int:
+    """Calculate age from birth_date and current_date (both YYYY.M.D format)."""
+    try:
+        birth_parts = birth_date.split('.')
+        current_parts = current_date.split('.')
+        if len(birth_parts) >= 3 and len(current_parts) >= 3:
+            birth_year = int(birth_parts[0])
+            birth_month = int(birth_parts[1])
+            current_year = int(current_parts[0])
+            current_month = int(current_parts[1])
+            age = current_year - birth_year
+            if current_month < birth_month:
+                age -= 1
+            return max(0, age)
+    except (ValueError, IndexError):
+        pass
+    return 0
+
+
 def find_character(filepath: str, char_id: int) -> dict | None:
     with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
         in_char_db = False
@@ -214,8 +273,74 @@ def find_character(filepath: str, char_id: int) -> dict | None:
                 'dip': extract_value(text, r'dip=(\d+)', int, 0),
                 'mil': extract_value(text, r'mil=(\d+)', int, 0),
                 'first_name': extract_value(text, r'first_name="([^"]+)"', str, ""),
+                'birth_date': extract_value(text, r'birth_date=(\d+\.\d+\.\d+)', str, ""),
                 'traits': traits,
             }
+    return None
+
+
+def find_regent_for_country(filepath: str, country_id: int) -> dict | None:
+    """Find a character who is regent for the given country ID.
+
+    Searches character_db for alive_data.regent_of containing the country_id.
+    Returns character info dict or None.
+    """
+    with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+        in_char_db = False
+        in_database = False
+        current_char_id = None
+        collecting = False
+        depth = 0
+        lines = []
+
+        for line in f:
+            if not in_char_db:
+                if 'character_db={' in line:
+                    in_char_db = True
+                continue
+            if not in_database:
+                if 'database={' in line:
+                    in_database = True
+                continue
+
+            # Look for character block starts
+            stripped = line.strip()
+            if not collecting:
+                match = re.match(r'^(\d+)=\{', stripped)
+                if match:
+                    current_char_id = int(match.group(1))
+                    collecting = True
+                    lines = [line]
+                    depth = line.count('{') - line.count('}')
+            else:
+                lines.append(line)
+                depth += line.count('{') - line.count('}')
+                if depth <= 0:
+                    # End of character block - check if this is our regent
+                    text = ''.join(lines)
+                    # Look for regent_of containing our country_id
+                    regent_match = re.search(r'regent_of=\{\s*(\d+)', text)
+                    if regent_match and int(regent_match.group(1)) == country_id:
+                        # Found the regent!
+                        traits_match = re.search(r'traits=\{\s*([^}]+)\}', text)
+                        traits = traits_match.group(1).split() if traits_match else []
+                        return {
+                            'char_id': current_char_id,
+                            'adm': extract_value(text, r'adm=(\d+)', int, 0),
+                            'dip': extract_value(text, r'dip=(\d+)', int, 0),
+                            'mil': extract_value(text, r'mil=(\d+)', int, 0),
+                            'first_name': extract_value(text, r'first_name="([^"]+)"', str, ""),
+                            'birth_date': extract_value(text, r'birth_date=(\d+\.\d+\.\d+)', str, ""),
+                            'traits': traits,
+                        }
+                    # Reset for next character
+                    collecting = False
+                    lines = []
+
+            # Stop at end of character_db
+            if stripped == '}' and in_database and not collecting:
+                break
+
     return None
 
 
@@ -277,6 +402,14 @@ def parse_country(text: str, tag: str) -> CountryStats:
     # Ruler
     govt_block = extract_block(text, 'government')
     stats.ruler_id = extract_value(govt_block, r'ruler=(\d+)', int, 0)
+    # Check for regency - if there's an active_regent, use that for display
+    active_regent_id = extract_value(govt_block, r'active_regent=(\d+)', int, 0)
+    if active_regent_id:
+        stats.is_regency = True
+        stats.regent_id = active_regent_id
+        # During regency, the heir might be in heir= field
+        if not stats.ruler_id:
+            stats.ruler_id = extract_value(govt_block, r'heir=(\d+)', int, 0)
 
     # Rank - use great_power_rank field (not score_place which is different)
     stats.great_power_rank = extract_value(text, r'great_power_rank=(\d+)', int, 0)
@@ -321,6 +454,11 @@ def parse_country(text: str, tag: str) -> CountryStats:
     advances = extract_dict(text, 'researched_advances')
     stats.num_researched_advances = sum(1 for v in advances.values() if v == True)
     stats.institutions = [k for k, v in extract_dict(text, 'institutions').items() if v == True]
+
+    # Research progress - extract from current_research block
+    research_block = extract_block(text, 'current_research')
+    if research_block:
+        stats.research_progress = extract_value(research_block, r'progress=([\d.]+)', float, 0.0)
 
     # Government
     stats.government_type = extract_value(govt_block, r'type=(\w+)', str, "")
@@ -620,16 +758,53 @@ def generate_summary_report(countries: list[CountryStats], save_date: str) -> st
     lines.append("=" * W)
     lines.append("RULERS (sorted by total stats)")
     lines.append("-" * W)
-    lines.append(f"{'Tag':<5}{'A':<4}{'D':<4}{'M':<4}{'Tot':<5}{'Name':<12}{'Traits':<20}")
+    lines.append(f"{'Tag':<5}{'A':<4}{'D':<4}{'M':<4}{'Tot':<5}{'Age':<5}{'Name':<15}")
     lines.append("-" * W)
 
-    by_ruler = sorted(countries, key=lambda c: c.ruler_adm + c.ruler_dip + c.ruler_mil, reverse=True)
+    # For sorting, use regent stats if no ruler
+    def get_effective_stats(c):
+        if c.ruler_adm or c.ruler_dip or c.ruler_mil:
+            return c.ruler_adm + c.ruler_dip + c.ruler_mil
+        return c.regent_adm + c.regent_dip + c.regent_mil
+
+    by_ruler = sorted(countries, key=get_effective_stats, reverse=True)
     for c in by_ruler:
-        total = c.ruler_adm + c.ruler_dip + c.ruler_mil
-        traits_str = ", ".join(c.ruler_traits[:2]) if c.ruler_traits else ""
-        if len(c.ruler_traits) > 2:
-            traits_str += "..."
-        lines.append(f"{c.tag:<5}{c.ruler_adm:<4}{c.ruler_dip:<4}{c.ruler_mil:<4}{total:<5}{c.ruler_name[:11]:<12}{traits_str[:20]}")
+        # Use regent stats if no ruler (pure regency with no heir data)
+        if c.ruler_adm or c.ruler_dip or c.ruler_mil or c.ruler_name:
+            adm, dip, mil = c.ruler_adm, c.ruler_dip, c.ruler_mil
+            age_str = str(c.ruler_age) if c.ruler_age > 0 else "?"
+            name_str = c.ruler_name[:14]
+            if c.is_regency:
+                name_str += " [R]"
+        else:
+            # No ruler data - show regent
+            adm, dip, mil = c.regent_adm, c.regent_dip, c.regent_mil
+            age_str = str(c.regent_age) if c.regent_age > 0 else "?"
+            name_str = (c.regent_name[:11] + " [Reg]") if c.regent_name else "?"
+        total = adm + dip + mil
+        lines.append(f"{c.tag:<5}{adm:<4}{dip:<4}{mil:<4}{total:<5}{age_str:<5}{name_str:<15}")
+
+    # Show traits on separate lines
+    lines.append("")
+    lines.append("Ruler Traits:")
+    for c in by_ruler:
+        if c.ruler_traits:
+            traits_str = ", ".join(c.ruler_traits[:4])
+            if len(c.ruler_traits) > 4:
+                traits_str += f" (+{len(c.ruler_traits)-4})"
+            lines.append(f"  {c.tag}: {traits_str}")
+
+    # Show regencies separately if any
+    regencies = [c for c in countries if c.is_regency]
+    if regencies:
+        lines.append("")
+        lines.append("Regencies:")
+        for c in regencies:
+            regent_age_str = str(c.regent_age) if c.regent_age > 0 else "?"
+            lines.append(f"  {c.tag}: Regent {c.regent_name} ({c.regent_adm}/{c.regent_dip}/{c.regent_mil}, age {regent_age_str})")
+            if c.ruler_name:
+                heir_age_str = str(c.ruler_age) if c.ruler_age > 0 else "?"
+                lines.append(f"       Heir {c.ruler_name} ({c.ruler_adm}/{c.ruler_dip}/{c.ruler_mil}, age {heir_age_str})")
     lines.append("")
 
     # === ECONOMY ===
@@ -808,8 +983,13 @@ def generate_detailed_profiles(countries: list[CountryStats], save_date: str) ->
         lines.append(f"{'='*60}")
 
         # Ruler
-        ruler_info = f"Ruler: {c.ruler_name} ({c.ruler_adm}/{c.ruler_dip}/{c.ruler_mil})"
-        lines.append(ruler_info)
+        age_str = f", age {c.ruler_age}" if c.ruler_age > 0 else ""
+        if c.is_regency:
+            lines.append(f"REGENCY - Heir: {c.ruler_name} ({c.ruler_adm}/{c.ruler_dip}/{c.ruler_mil}{age_str})")
+            regent_age_str = f", age {c.regent_age}" if c.regent_age > 0 else ""
+            lines.append(f"          Regent: {c.regent_name} ({c.regent_adm}/{c.regent_dip}/{c.regent_mil}{regent_age_str})")
+        else:
+            lines.append(f"Ruler: {c.ruler_name} ({c.ruler_adm}/{c.ruler_dip}/{c.ruler_mil}{age_str})")
         if c.ruler_traits:
             lines.append(f"Traits: {', '.join(c.ruler_traits)}")
 
@@ -1092,12 +1272,329 @@ def generate_privileges_report(countries: list[CountryStats], save_date: str) ->
     return "\n".join(lines)
 
 
+def generate_comparison_report(current: list[CountryStats], previous: list[CountryStats],
+                                current_date: str, previous_date: str,
+                                player_matches: list[tuple[str, str]] = None) -> str:
+    """Generate a comparison report showing deltas between two saves.
+
+    Args:
+        current: List of country stats from current save
+        previous: List of country stats from previous save
+        current_date: Date string from current save
+        previous_date: Date string from previous save
+        player_matches: Optional list of (current_tag, previous_tag) tuples for
+                       players who changed tags (e.g., POL -> PLC)
+    """
+    lines = []
+    W = 55
+
+    # Build lookup by tag
+    prev_lookup = {c.tag: c for c in previous}
+    curr_lookup = {c.tag: c for c in current}
+
+    # Build list of (current_stats, previous_stats) pairs
+    countries_to_compare = []
+
+    # First, handle explicit player matches (for tag changes)
+    matched_curr_tags = set()
+    matched_prev_tags = set()
+    if player_matches:
+        for curr_tag, prev_tag in player_matches:
+            if curr_tag in curr_lookup and prev_tag in prev_lookup:
+                countries_to_compare.append((curr_lookup[curr_tag], prev_lookup[prev_tag]))
+                matched_curr_tags.add(curr_tag)
+                matched_prev_tags.add(prev_tag)
+
+    # Then, match remaining countries by same tag
+    for tag in curr_lookup:
+        if tag not in matched_curr_tags and tag in prev_lookup and tag not in matched_prev_tags:
+            countries_to_compare.append((curr_lookup[tag], prev_lookup[tag]))
+
+    if not countries_to_compare:
+        return "No common countries to compare."
+
+    # Sort by current GP rank
+    countries_to_compare.sort(key=lambda x: x[0].great_power_rank if x[0].great_power_rank > 0 else 9999)
+
+    lines.append("=" * W)
+    lines.append("SESSION COMPARISON REPORT")
+    lines.append("=" * W)
+    lines.append(f"Previous: {previous_date}")
+    lines.append(f"Current:  {current_date}")
+    lines.append(f"Players:  {len(countries_to_compare)}")
+
+    # Show any tag changes
+    tag_changes = [(curr.tag, prev.tag) for curr, prev in countries_to_compare if curr.tag != prev.tag]
+    if tag_changes:
+        lines.append("")
+        lines.append("Tag changes:")
+        for new_tag, old_tag in tag_changes:
+            lines.append(f"  {old_tag} → {new_tag}")
+    lines.append("")
+
+    def fmt_tag(curr_tag: str, prev_tag: str) -> str:
+        """Format tag, showing old tag if different."""
+        if curr_tag != prev_tag:
+            return f"{curr_tag}←{prev_tag}"
+        return curr_tag
+
+    def fmt_delta(val: float, precision: int = 0) -> str:
+        """Format a delta value with + or - prefix."""
+        if precision == 0:
+            return f"+{val:.0f}" if val >= 0 else f"{val:.0f}"
+        return f"+{val:.{precision}f}" if val >= 0 else f"{val:.{precision}f}"
+
+    def fmt_pop_delta(val: float) -> str:
+        """Format population delta (in thousands -> display as K or M)."""
+        if abs(val) >= 1000:
+            return f"+{val/1000:.2f}M" if val >= 0 else f"{val/1000:.2f}M"
+        return f"+{val:.1f}K" if val >= 0 else f"{val:.1f}K"
+
+    # === GREAT POWER RANK CHANGES ===
+    lines.append("=" * W)
+    lines.append("GREAT POWER RANK CHANGES")
+    lines.append("-" * W)
+
+    rank_changes = []
+    for curr, prev in countries_to_compare:
+        if prev.great_power_rank > 0 and curr.great_power_rank > 0:
+            change = prev.great_power_rank - curr.great_power_rank  # Positive = improved
+            rank_changes.append((curr.tag, prev.great_power_rank, curr.great_power_rank, change))
+
+    rank_changes.sort(key=lambda x: -x[3])  # Best improvement first
+    for tag, old_rank, new_rank, change in rank_changes:
+        if change > 0:
+            symbol = f"↑{change}"
+        elif change < 0:
+            symbol = f"↓{-change}"
+        else:
+            symbol = "="
+        lines.append(f"  {tag:<5} #{old_rank} → #{new_rank}  ({symbol})")
+    lines.append("")
+
+    # === POPULATION CHANGES ===
+    lines.append("=" * W)
+    lines.append("POPULATION GROWTH")
+    lines.append("-" * W)
+    lines.append(f"{'Tag':<5}{'Previous':<10}{'Current':<10}{'Delta':<10}{'%':<8}")
+    lines.append("-" * W)
+
+    pop_changes = []
+    for curr, prev in countries_to_compare:
+        delta = curr.population - prev.population
+        pct = (delta / prev.population * 100) if prev.population > 0 else 0
+        pop_changes.append((curr.tag, prev.population, curr.population, delta, pct))
+
+    pop_changes.sort(key=lambda x: -x[4])  # Best % growth first
+    for tag, old_pop, new_pop, delta, pct in pop_changes:
+        lines.append(f"{tag:<5}{fmt_pop(old_pop):<10}{fmt_pop(new_pop):<10}{fmt_pop_delta(delta):<10}{fmt_delta(pct, 1)}%")
+    lines.append("")
+
+    # === TAX BASE CHANGES ===
+    lines.append("=" * W)
+    lines.append("TAX BASE GROWTH")
+    lines.append("-" * W)
+    lines.append(f"{'Tag':<5}{'Previous':<10}{'Current':<10}{'Delta':<10}{'%':<8}")
+    lines.append("-" * W)
+
+    tax_changes = []
+    for curr, prev in countries_to_compare:
+        delta = curr.current_tax_base - prev.current_tax_base
+        pct = (delta / prev.current_tax_base * 100) if prev.current_tax_base > 0 else 0
+        tax_changes.append((curr.tag, prev.current_tax_base, curr.current_tax_base, delta, pct))
+
+    tax_changes.sort(key=lambda x: -x[4])  # Best % growth first
+    for tag, old_tax, new_tax, delta, pct in tax_changes:
+        lines.append(f"{tag:<5}{fmt_num(old_tax):<10}{fmt_num(new_tax):<10}{fmt_delta(delta):<10}{fmt_delta(pct, 1)}%")
+    lines.append("")
+
+    # === INCOME CHANGES ===
+    lines.append("=" * W)
+    lines.append("MONTHLY INCOME CHANGES")
+    lines.append("-" * W)
+    lines.append(f"{'Tag':<5}{'Previous':<10}{'Current':<10}{'Delta':<10}{'%':<8}")
+    lines.append("-" * W)
+
+    income_changes = []
+    for curr, prev in countries_to_compare:
+        delta = curr.monthly_income - prev.monthly_income
+        pct = (delta / prev.monthly_income * 100) if prev.monthly_income > 0 else 0
+        income_changes.append((curr.tag, prev.monthly_income, curr.monthly_income, delta, pct))
+
+    income_changes.sort(key=lambda x: -x[4])
+    for tag, old_inc, new_inc, delta, pct in income_changes:
+        lines.append(f"{tag:<5}{fmt_num(old_inc):<10}{fmt_num(new_inc):<10}{fmt_delta(delta):<10}{fmt_delta(pct, 1)}%")
+    lines.append("")
+
+    # === TREASURY CHANGES ===
+    lines.append("=" * W)
+    lines.append("TREASURY CHANGES")
+    lines.append("-" * W)
+    lines.append(f"{'Tag':<5}{'Previous':<10}{'Current':<10}{'Delta':<12}")
+    lines.append("-" * W)
+
+    treasury_changes = []
+    for curr, prev in countries_to_compare:
+        delta = curr.gold - prev.gold
+        treasury_changes.append((curr.tag, prev.gold, curr.gold, delta))
+
+    treasury_changes.sort(key=lambda x: -x[3])
+    for tag, old_gold, new_gold, delta in treasury_changes:
+        lines.append(f"{tag:<5}{fmt_num(old_gold):<10}{fmt_num(new_gold):<10}{fmt_delta(delta)}")
+    lines.append("")
+
+    # === MILITARY CHANGES ===
+    lines.append("=" * W)
+    lines.append("MILITARY CHANGES (Regiments)")
+    lines.append("-" * W)
+    lines.append(f"{'Tag':<5}{'Previous':<10}{'Current':<10}{'Delta':<10}")
+    lines.append("-" * W)
+
+    mil_changes = []
+    for curr, prev in countries_to_compare:
+        delta = curr.num_subunits - prev.num_subunits
+        mil_changes.append((curr.tag, prev.num_subunits, curr.num_subunits, delta))
+
+    mil_changes.sort(key=lambda x: -x[3])
+    for tag, old_mil, new_mil, delta in mil_changes:
+        lines.append(f"{tag:<5}{old_mil:<10}{new_mil:<10}{fmt_delta(delta)}")
+    lines.append("")
+
+    # === MANPOWER CHANGES ===
+    lines.append("=" * W)
+    lines.append("MAX MANPOWER CHANGES")
+    lines.append("-" * W)
+    lines.append(f"{'Tag':<5}{'Previous':<10}{'Current':<10}{'Delta':<10}{'%':<8}")
+    lines.append("-" * W)
+
+    mp_changes = []
+    for curr, prev in countries_to_compare:
+        delta = curr.max_manpower - prev.max_manpower
+        pct = (delta / prev.max_manpower * 100) if prev.max_manpower > 0 else 0
+        mp_changes.append((curr.tag, prev.max_manpower, curr.max_manpower, delta, pct))
+
+    mp_changes.sort(key=lambda x: -x[4])
+    for tag, old_mp, new_mp, delta, pct in mp_changes:
+        lines.append(f"{tag:<5}{old_mp:<10.1f}{new_mp:<10.1f}{fmt_delta(delta, 1):<10}{fmt_delta(pct, 1)}%")
+    lines.append("")
+
+    # === TECHNOLOGY CHANGES ===
+    lines.append("=" * W)
+    lines.append("TECHNOLOGY ADVANCES GAINED")
+    lines.append("-" * W)
+
+    tech_changes = []
+    for curr, prev in countries_to_compare:
+        delta = curr.num_researched_advances - prev.num_researched_advances
+        tech_changes.append((curr.tag, prev.num_researched_advances, curr.num_researched_advances, delta))
+
+    tech_changes.sort(key=lambda x: -x[3])  # Sort by advances gained
+    for tag, old_adv, new_adv, delta in tech_changes:
+        lines.append(f"  {tag:<5} {old_adv} → {new_adv}  ({fmt_delta(delta)} advances)")
+    lines.append("")
+
+    # === PROVINCE CHANGES ===
+    lines.append("=" * W)
+    lines.append("TERRITORY CHANGES (Provinces)")
+    lines.append("-" * W)
+
+    prov_changes = []
+    for curr, prev in countries_to_compare:
+        delta = curr.num_provinces - prev.num_provinces
+        prov_changes.append((curr.tag, prev.num_provinces, curr.num_provinces, delta))
+
+    prov_changes.sort(key=lambda x: -x[3])
+    for tag, old_prov, new_prov, delta in prov_changes:
+        if delta != 0:
+            lines.append(f"  {tag:<5} {old_prov} → {new_prov}  ({fmt_delta(delta)} provinces)")
+        else:
+            lines.append(f"  {tag:<5} {old_prov} → {new_prov}  (unchanged)")
+    lines.append("")
+
+    # === STABILITY/PRESTIGE ===
+    lines.append("=" * W)
+    lines.append("STABILITY & PRESTIGE")
+    lines.append("-" * W)
+    lines.append(f"{'Tag':<5}{'Stab Δ':<10}{'Prest Δ':<10}{'ArmyT Δ':<10}{'NavyT Δ':<10}")
+    lines.append("-" * W)
+
+    for curr, prev in countries_to_compare:
+        stab_d = curr.stability - prev.stability
+        pres_d = curr.prestige - prev.prestige
+        army_d = curr.army_tradition - prev.army_tradition
+        navy_d = curr.navy_tradition - prev.navy_tradition
+        lines.append(f"{curr.tag:<5}{fmt_delta(stab_d, 1):<10}{fmt_delta(pres_d, 1):<10}{fmt_delta(army_d, 1):<10}{fmt_delta(navy_d, 1):<10}")
+    lines.append("")
+
+    # === SUBJECT CHANGES ===
+    # Check if any country has subjects in either save
+    has_subjects = any(len(c.subjects) > 0 for c, _ in countries_to_compare) or \
+                   any(len(p.subjects) > 0 for _, p in countries_to_compare)
+    if has_subjects:
+        lines.append("=" * W)
+        lines.append("SUBJECT CHANGES")
+        lines.append("-" * W)
+
+        for curr, prev in countries_to_compare:
+            curr_subjs = set(curr.subjects)
+            prev_subjs = set(prev.subjects)
+            gained = curr_subjs - prev_subjs
+            lost = prev_subjs - curr_subjs
+
+            if gained or lost:
+                lines.append(f"{curr.tag}:")
+                if gained:
+                    lines.append(f"  Gained: {', '.join(gained)}")
+                if lost:
+                    lines.append(f"  Lost: {', '.join(lost)}")
+        lines.append("")
+
+    # === SUMMARY: BIGGEST GAINERS ===
+    lines.append("=" * W)
+    lines.append("SESSION MVPs")
+    lines.append("-" * W)
+
+    # Find leaders in each category
+    if pop_changes:
+        best_pop = max(pop_changes, key=lambda x: x[4])
+        lines.append(f"  Pop Growth:  {best_pop[0]} ({fmt_delta(best_pop[4], 1)}%)")
+
+    if tax_changes:
+        best_tax = max(tax_changes, key=lambda x: x[4])
+        lines.append(f"  Tax Growth:  {best_tax[0]} ({fmt_delta(best_tax[4], 1)}%)")
+
+    if income_changes:
+        best_inc = max(income_changes, key=lambda x: x[4])
+        lines.append(f"  Income Growth: {best_inc[0]} ({fmt_delta(best_inc[4], 1)}%)")
+
+    if mil_changes:
+        best_mil = max(mil_changes, key=lambda x: x[3])
+        lines.append(f"  Military:    {best_mil[0]} ({fmt_delta(best_mil[3])} regiments)")
+
+    if tech_changes:
+        best_tech = max(tech_changes, key=lambda x: x[3])
+        lines.append(f"  Tech:        {best_tech[0]} ({fmt_delta(best_tech[3])} advances)")
+
+    if prov_changes:
+        best_prov = max(prov_changes, key=lambda x: x[3])
+        if best_prov[3] > 0:
+            lines.append(f"  Expansion:   {best_prov[0]} ({fmt_delta(best_prov[3])} provinces)")
+
+    lines.append("")
+    lines.append("=" * W)
+    lines.append("END OF COMPARISON REPORT")
+    lines.append("=" * W)
+
+    return "\n".join(lines)
+
+
 def main():
     import argparse
 
     parser = argparse.ArgumentParser(description='Generate EU5 multiplayer session report')
     parser.add_argument('-o', '--output', help='Output directory (default: reports/)')
     parser.add_argument('--no-timestamp', action='store_true', help='Don\'t create timestamped subfolder')
+    parser.add_argument('--compare', help='Previous save file to compare against')
     args = parser.parse_args()
 
     # Find save file
@@ -1129,27 +1626,49 @@ def main():
     print(f"Output: {report_dir}", file=sys.stderr)
 
     countries = []
-    for tag, name in PLAYER_COUNTRIES.items():
-        print(f"  Parsing {tag}...", file=sys.stderr, end=" ", flush=True)
-        country_text = find_country_in_file(str(save_file), tag)
+    for player_tags in PLAYER_TAGS:
+        # Try each tag in the player's tag list (newest/formed nation first)
+        found = False
+        for tag in reversed(player_tags):
+            print(f"  Parsing {tag}...", file=sys.stderr, end=" ", flush=True)
+            country_text = find_country_in_file(str(save_file), tag)
 
-        if country_text:
-            stats = parse_country(country_text, tag)
+            if country_text:
+                stats = parse_country(country_text, tag)
 
-            # Get ruler stats
-            if stats.ruler_id:
-                ruler = find_character(str(save_file), stats.ruler_id)
-                if ruler:
-                    stats.ruler_adm = ruler['adm']
-                    stats.ruler_dip = ruler['dip']
-                    stats.ruler_mil = ruler['mil']
-                    stats.ruler_name = ruler['first_name'].replace('name_', '').title()
-                    stats.ruler_traits = ruler.get('traits', [])
+                # Get ruler stats
+                if stats.ruler_id:
+                    ruler = find_character(str(save_file), stats.ruler_id)
+                    if ruler:
+                        stats.ruler_adm = int(ruler['adm'])
+                        stats.ruler_dip = int(ruler['dip'])
+                        stats.ruler_mil = int(ruler['mil'])
+                        stats.ruler_name = ruler['first_name'].replace('name_', '').title()
+                        stats.ruler_traits = ruler.get('traits', [])
+                        stats.ruler_birth_date = ruler.get('birth_date', '')
+                        if stats.ruler_birth_date:
+                            stats.ruler_age = calculate_age(stats.ruler_birth_date, save_date)
 
-            countries.append(stats)
-            print("OK", file=sys.stderr)
-        else:
-            print("NOT FOUND", file=sys.stderr)
+                # Get regent stats if in regency
+                if stats.regent_id:
+                    regent = find_character(str(save_file), stats.regent_id)
+                    if regent:
+                        stats.regent_adm = int(regent['adm'])
+                        stats.regent_dip = int(regent['dip'])
+                        stats.regent_mil = int(regent['mil'])
+                        stats.regent_name = regent['first_name'].replace('name_', '').title()
+                        if regent.get('birth_date'):
+                            stats.regent_age = calculate_age(regent['birth_date'], save_date)
+
+                countries.append(stats)
+                print("OK", file=sys.stderr)
+                found = True
+                break
+            else:
+                print("not found, ", file=sys.stderr, end="")
+
+        if not found:
+            print(f"NOT FOUND (tried: {', '.join(player_tags)})", file=sys.stderr)
 
     if countries:
         # Calculate control values from locations data
@@ -1211,6 +1730,53 @@ def main():
         with open(privs_file, 'w') as f:
             f.write(generate_privileges_report(countries, save_date))
         print(f"Privileges saved to: {privs_file}", file=sys.stderr)
+
+        # Generate comparison report if previous save provided
+        if args.compare:
+            prev_file = Path(args.compare)
+            if prev_file.exists():
+                print(f"  Loading previous save for comparison...", file=sys.stderr)
+                prev_date = get_save_date(str(prev_file))
+
+                # For each player, find their tag in the previous save
+                # This handles tag changes (e.g., POL -> PLC)
+                prev_countries = []
+                player_matches = []  # List of (current_tag, previous_tag) for tag changes
+
+                for player_tags in PLAYER_TAGS:
+                    # Find which tag this player has in previous save
+                    prev_tag = None
+                    for tag in reversed(player_tags):  # Try newest first
+                        country_text = find_country_in_file(str(prev_file), tag)
+                        if country_text:
+                            prev_tag = tag
+                            stats = parse_country(country_text, tag)
+                            prev_countries.append(stats)
+                            break
+
+                    # Find which tag this player has in current save
+                    curr_tag = None
+                    for c in countries:
+                        if c.tag in player_tags:
+                            curr_tag = c.tag
+                            break
+
+                    # Record the match if both exist (even if same tag)
+                    if curr_tag and prev_tag:
+                        player_matches.append((curr_tag, prev_tag))
+
+                if prev_countries:
+                    # Get subjects for previous save
+                    prev_subjects_map = get_subjects_for_countries(str(prev_file), [c.tag for c in prev_countries])
+                    for c in prev_countries:
+                        c.subjects = prev_subjects_map.get(c.tag, [])
+
+                    comparison_file = report_dir / "comparison_report.txt"
+                    with open(comparison_file, 'w') as f:
+                        f.write(generate_comparison_report(countries, prev_countries, save_date, prev_date, player_matches))
+                    print(f"Comparison saved to: {comparison_file}", file=sys.stderr)
+            else:
+                print(f"Warning: Previous save not found: {prev_file}", file=sys.stderr)
 
 
 if __name__ == '__main__':

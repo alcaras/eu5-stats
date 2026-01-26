@@ -2,12 +2,11 @@
 # One country tag per line
 # Use the tag from the save file (check flag=TAG for formed nations)
 GBR
-POL
+POL PLC
 FRA
-SWE
 SKO
 BOH
-MLO
+MLO ITA
 SER
 TUR
 IRE

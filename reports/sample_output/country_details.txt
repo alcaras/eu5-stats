@@ -1,377 +1,292 @@
 ============================================================
 DETAILED COUNTRY PROFILES
-Save: 1433.1.1
+Save: 1469.1.1
 ============================================================
 
 ============================================================
-MLO (MLO) - GP #2
+FRA (FRA) - GP #2
 ============================================================
-Ruler: Paul (30/24/49)
-Traits: scholar, industrious, calm
+Ruler: Charles (82/58/44, age 41)
+Traits: naive
 
 Government: monarchy | Religion: Catholic
-Stability: 73.7 | Prestige: 1.6
-Average Control: 52.6%
+Stability: 40.6 | Prestige: 44.7
+Average Control: 37.6%
 
-Population: 3.72M across 35 provinces
-Income: 583.5 | Treasury: 838.7
-Tax Base: 987.6 | Loan Cap: 29.2K
+Population: 12.35M across 78 provinces
+Income: 827.1 | Treasury: 7,169
+Tax Base: 1,168 | Loan Cap: 39.4K
 
-Manpower: 35.4/35.7
-Regiments: 129
-Army Tradition: 11.3 | Navy: 8.8
+Manpower: 35.7/49.2
+Regiments: 115
+Army Tradition: 27.3 | Navy: 13.0
 
-Tech: 141 advances
-Institutions (6): professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+Tech: 169 advances
+Institutions (9): pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
 
-Reforms: diplomatic_traditions, agricultural_cultivation, autocracy
+Reforms: diplomatic_traditions, national_assemblies, french_centralized_monarchy
 
-Privileges (30 total):
-  Nobles: nobles_land_rights, noble_fortification_licenses, noble_serfdom_rights, noble_patronage_of_the_arts
-  Clergy: clerical_advisory_council, clergy_enforced_unity, clergy_literacy_rights, clergy_religious_state, clergy_in_administration
-  Burghers: burghers_land_rights, formal_guilds
-  Peasants: peasants_allowed_weapons_privilege, peasants_free_peasantry, peasants_represented_in_parliament, peasants_in_administration
-  Dhimmi: dhimmi_legal_autonomy, dhimmi_in_administration
-  General: building_rights, partial_yield, commercial_advisory_council, trade_monopolies, building_roads_rights, control_over_the_coinage, land_of_commerce, nobility_council, elaborate_court_ceremonies, milanese_cloth_guilds_privileges, treasury_rights, communal_lands, reduced_from_military_obligations
+Privileges (27 total):
+  Nobles: nobles_land_rights, noble_marriage_rights, auxilium_et_consilium, noble_fortification_licenses, primacy_of_nobility, noble_armies
+  Clergy: clergy_enforced_unity, clergy_religious_state, clergy_strengthen_faith
+  Peasants: peasants_allowed_weapons_privilege, peasants_in_administration, peasants_represented_in_parliament
+  General: building_roads_rights, allow_hunting, communal_lands, market_fairs, great_offices_of_the_crown_of_france, chancellor_nobles, villes_franches, access_to_royal_and_ecclesiastical_courts, treasury_rights, urban_development_grants, reduced_from_military_obligations, land_of_commerce, building_rights, fra_papacy_pragmatic_sanctions, commercial_advisory_council
 
 Societal Values:
-  Centralization: 100
-  Serfdom: 20
-  Aristocracy: -76
-  Traditional: 56
-  Spiritualist: -59
-  Capital Econ: -28
-  Individualism: 12
-  Quality: 12
-  Offensive: -15
-  Land Focus: 23
-  Belligerent: 29
+  Centralization: 80
+  Serfdom: 45
+  Aristocracy: -72
+  Traditional: 77
+  Spiritualist: 28
+  Capital Econ: 55
+  Individualism: 60
+  Quality: -47
+  Offensive: -3
+  Land Focus: -56
+  Belligerent: 40
 
 ============================================================
 BOH (BOH) - GP #3
 ============================================================
-Ruler: Sigmund (58/51/51)
-Traits: drunkard, calm
+Ruler: Henry (50/48/63, age 54)
+Traits: zealot, well_advised
 
 Government: monarchy | Religion: Hussite
-Stability: 43.3 | Prestige: 28.9
-Average Control: 54.9%
+Stability: 35.8 | Prestige: 21.0
+Average Control: 58.6%
 
-Population: 3.78M across 32 provinces
-Income: 1,087 | Treasury: 10.7K
-Tax Base: 1,790 | Loan Cap: 62.2K
+Population: 5.71M across 48 provinces
+Income: 1,632 | Treasury: 2,189
+Tax Base: 2,815 | Loan Cap: 107.2K
 
-Manpower: 48.6/49.2
+Manpower: 71.1/72.1
 Regiments: 172
-Army Tradition: 18.8 | Navy: 2.2
+Army Tradition: 25.8 | Navy: 2.6
 
-Tech: 136 advances
-Institutions (6): professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+Tech: 168 advances
+Institutions (9): pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
 
-Reforms: autocracy, enforce_religious_adherence, agricultural_cultivation
+Reforms: autocracy, universal_serfdom, the_transportation_act
 
-Privileges (37 total):
+Privileges (38 total):
   Nobles: nobles_land_rights, noble_marriage_rights, auxilium_et_consilium, noble_fortification_licenses, primacy_of_nobility, noble_serfdom_rights, noble_patronage_of_the_arts
-  Clergy: clergy_strengthen_faith, clergy_powerful_dioceses, clergy_religious_state, clergy_in_administration, clerical_advisory_council
+  Clergy: clergy_strengthen_faith, clergy_powerful_dioceses, clergy_religious_state, clergy_in_administration, clerical_advisory_council, clergy_literacy_rights
   Burghers: formal_guilds
   Peasants: peasants_allowed_weapons_privilege, peasants_free_peasantry, peasants_in_administration, peasant_owns_their_food
-  General: building_roads_rights, allow_hunting, communal_lands, market_fairs, access_to_royal_and_ecclesiastical_courts, treasury_rights, urban_development_grants, right_to_inherit, nobility_council, expansionist_zealotry, control_over_monetary_policy, district_paving_privilege, control_over_the_coinage, no_labor_sunday, guild_investments, reduced_from_military_obligations, land_of_commerce, magdeburg_rights, manorial_courts, shipwright_contracts
+  General: building_roads_rights, allow_hunting, communal_lands, market_fairs, access_to_royal_and_ecclesiastical_courts, treasury_rights, urban_development_grants, right_to_inherit, nobility_council, expansionist_zealotry, district_paving_privilege, control_over_the_coinage, no_labor_sunday, guild_investments, reduced_from_military_obligations, land_of_commerce, magdeburg_rights, manorial_courts, shipwright_contracts, tax_exemption
 
 Societal Values:
-  Centralization: 90
+  Centralization: 100
   Serfdom: -100
   Aristocracy: -100
   Traditional: 96
   Spiritualist: -100
   Capital Econ: 100
-  Individualism: 98
+  Individualism: 100
   Quality: -30
   Offensive: 39
-  Land Focus: -96
-  Belligerent: -49
+  Land Focus: -100
+  Belligerent: -55
 
 ============================================================
-FRA (FRA) - GP #12
+ITA (ITA) - GP #4
 ============================================================
-Ruler: Louis (100/93/100)
-Traits: tactical_genius, industrious
+REGENCY - Heir:  (0/0/0)
+          Regent: Beatrix (98/92/97, age 48)
 
 Government: monarchy | Religion: Catholic
-Stability: 11.9 | Prestige: 46.3
-Average Control: 39.4%
+Stability: 44.6 | Prestige: 30.3
+Average Control: 46.0%
 
-Population: 5.53M across 44 provinces
-Income: 439.1 | Treasury: 5,179
-Tax Base: 542.6 | Loan Cap: 27.7K
+Population: 8.06M across 59 provinces
+Income: 1,039 | Treasury: 441.4
+Tax Base: 1,947 | Loan Cap: 74.7K
 
-Manpower: 13.1/15.4
-Regiments: 67
-Army Tradition: 32.9 | Navy: 0.0
+Manpower: 32.7/60.2
+Regiments: 235
+Army Tradition: 11.3 | Navy: 9.6
 
-Tech: 133 advances
-Institutions (6): professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+Tech: 174 advances
+Institutions (9): pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
 
-Reforms: diplomatic_traditions, national_assemblies, french_centralized_monarchy
+Reforms: diplomatic_traditions, agricultural_cultivation, autocracy
 
-Privileges (23 total):
-  Nobles: nobles_land_rights, noble_marriage_rights, auxilium_et_consilium, noble_fortification_licenses, primacy_of_nobility, noble_armies
-  Clergy: clergy_enforced_unity, clergy_religious_state, clergy_strengthen_faith
-  Peasants: peasants_allowed_weapons_privilege, peasants_in_administration, peasants_represented_in_parliament
-  General: building_roads_rights, allow_hunting, communal_lands, market_fairs, great_offices_of_the_crown_of_france, chancellor_nobles, villes_franches, access_to_royal_and_ecclesiastical_courts, treasury_rights, urban_development_grants, reduced_from_military_obligations
+Privileges (32 total):
+  Nobles: nobles_land_rights, noble_fortification_licenses, noble_serfdom_rights, noble_patronage_of_the_arts, noble_leaders_only
+  Clergy: clerical_advisory_council, clergy_enforced_unity, clergy_literacy_rights, clergy_religious_state, clergy_in_administration
+  Burghers: burghers_land_rights, formal_guilds
+  Peasants: peasants_allowed_weapons_privilege, peasants_free_peasantry, peasants_represented_in_parliament, peasants_in_administration
+  Dhimmi: dhimmi_legal_autonomy, dhimmi_in_administration
+  General: building_rights, partial_yield, commercial_advisory_council, trade_monopolies, building_roads_rights, control_over_the_coinage, land_of_commerce, nobility_council, elaborate_court_ceremonies, milanese_cloth_guilds_privileges, treasury_rights, communal_lands, reduced_from_military_obligations, manorial_courts
 
 Societal Values:
-  Centralization: 71
-  Serfdom: -55
-  Aristocracy: -77
-  Traditional: 71
-  Spiritualist: 17
-  Capital Econ: 69
-  Individualism: 60
-  Quality: -37
-  Offensive: 8
-  Land Focus: -64
+  Centralization: 99
+  Serfdom: 20
+  Aristocracy: -86
+  Traditional: 68
+  Spiritualist: -74
+  Capital Econ: -30
+  Individualism: 12
+  Quality: 12
+  Offensive: -12
+  Land Focus: 27
   Belligerent: 35
 
 ============================================================
-POL (POL) - GP #17
+PLC (PLC) - GP #11
 ============================================================
-Ruler: Casimir (29/24/25)
-Traits: entrepreneur
+Ruler: Casimir (81/96/75, age 18)
 
 Government: theocracy | Religion: Sunni
-Stability: -11.7 | Prestige: 0.1
-Average Control: 25.9%
+Stability: 12.6 | Prestige: 0.0
+Average Control: 37.0%
 
-Population: 2.42M across 43 provinces
-Income: 175.7 | Treasury: 1,499
-Tax Base: 367.5 | Loan Cap: 14.4K
+Population: 3.44M across 53 provinces
+Income: 436.9 | Treasury: 1,431
+Tax Base: 696.2 | Loan Cap: 30.3K
 
-Manpower: 8.5/8.5
-Regiments: 36
-Army Tradition: 26.7 | Navy: 3.5
+Manpower: 13.0/13.1
+Regiments: 43
+Army Tradition: 11.9 | Navy: 0.0
 
-Tech: 134 advances
-Institutions (6): professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+Tech: 177 advances
+Institutions (9): pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
 
 Reforms: agricultural_cultivation, diplomatic_traditions, plutocratic_ethos
 
-Privileges (28 total):
+Privileges (33 total):
   Nobles: nobles_land_rights, primacy_of_nobility, noble_serfdom_rights
   Clergy: clergy_enforced_unity, clergy_strengthen_faith, clergy_religious_state, clergy_in_administration, clerical_advisory_council, clergy_land_rights
   Burghers: polish_merchant_seal
+  Peasants: peasants_in_administration, peasants_allowed_weapons_privilege
+  Dhimmi: dhimmi_administrative_posts, dhimmi_promote_dhimmi_hierarchy
   Tribes: tribes_allow_gatherings, tribes_in_administration, tribes_land_rights, tribes_tribal_registry
-  General: expansionist_zealotry, promote_cultural_unity, privilege_of_koszyce, tax_exemption, embellish_great_works_of_faith, religious_diplomats, reduced_from_military_obligations, control_of_the_borderlands, building_rights, allow_trade_center_sponsorship, control_over_the_coinage, land_of_commerce, market_fairs, treasury_rights
+  General: expansionist_zealotry, promote_cultural_unity, privilege_of_koszyce, tax_exemption, embellish_great_works_of_faith, religious_diplomats, reduced_from_military_obligations, building_rights, allow_trade_center_sponsorship, control_over_the_coinage, land_of_commerce, market_fairs, treasury_rights, control_of_the_borderlands, communal_lands
 
 Societal Values:
   Centralization: 100
-  Serfdom: -71
+  Serfdom: -73
   Aristocracy: -100
   Traditional: 100
   Spiritualist: -100
   Capital Econ: -39
   Individualism: 100
-  Quality: -35
-  Offensive: -57
-  Land Focus: -85
-  Belligerent: -63
-
-============================================================
-SER (SER) - GP #19
-============================================================
-Ruler: Boleslava (42/40/53)
-Traits: bold_fighter
-
-Government: monarchy | Religion: Orthodox
-Stability: 24.7 | Prestige: 3.1
-Average Control: 19.4%
-
-Population: 2.57M across 40 provinces
-Income: 182.2 | Treasury: 511.1
-Tax Base: 280.3 | Loan Cap: 13.0K
-
-Manpower: 9.6/9.6
-Regiments: 70
-Army Tradition: 18.1 | Navy: 2.6
-
-Tech: 130 advances
-Institutions (6): professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-
-Reforms: autocracy, royal_decree, agricultural_cultivation
-
-Privileges (35 total):
-  Nobles: nobles_land_rights, noble_marriage_rights, auxilium_et_consilium, noble_fortification_licenses, noble_patronage_of_the_arts, noble_serfdom_rights
-  Clergy: clergy_enforced_unity, clergy_literacy_rights, clergy_powerful_dioceses, clergy_strengthen_faith, clergy_religious_state
-  Burghers: formal_guilds
-  Peasants: peasants_allowed_weapons_privilege, peasants_in_administration, peasants_represented_in_parliament
-  Dhimmi: dhimmi_in_administration, dhimmi_pact_of_umar
-  General: building_roads_rights, communal_lands, market_fairs, bashtinas_and_pronijas_grants, zupa_districts, gradozadanje_and_gradobljudenlje_rights, allow_trade_center_sponsorship, commercial_advisory_council, control_over_the_coinage, guild_investments, land_of_commerce, urban_development_grants, embellish_great_works_of_faith, control_over_monetary_policy, treasury_rights, promote_cultural_unity, expansionist_zealotry, reduced_from_military_obligations
-
-Societal Values:
-  Centralization: 80
-  Serfdom: -53
-  Aristocracy: -69
-  Traditional: 61
-  Spiritualist: -1
-  Capital Econ: -17
-  Individualism: 57
-  Quality: -19
-  Offensive: 39
-  Land Focus: -56
-  Belligerent: -18
-
-============================================================
-GBR (GBR) - GP #22
-============================================================
-Ruler: Gerard (41/1/85)
-Traits: embezzler
-
-Government: monarchy | Religion: Sunni
-Stability: -21.8 | Prestige: 22.3
-Average Control: 24.5%
-
-Population: 4.11M across 59 provinces
-Income: 137.2 | Treasury: 216.3
-Tax Base: 319.2 | Loan Cap: 13.2K
-
-Manpower: 2.1/2.1
-Regiments: 20
-Army Tradition: 16.0 | Navy: 10.9
-
-Tech: 141 advances
-Institutions (6): professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-
-Reforms: magna_carta_reform, autocracy, agricultural_cultivation
-
-Privileges (31 total):
-  Nobles: nobles_land_rights, noble_marriage_rights, noble_fortification_licenses, noble_serfdom_rights, noble_sponsored_navy
-  Clergy: clergy_enforced_unity, clergy_in_administration, clerical_advisory_council, clergy_religious_state, clergy_strengthen_faith
-  Burghers: formal_guilds
-  Peasants: peasants_allowed_weapons_privilege, peasants_yeomanry
-  Dhimmi: dhimmi_land_rights, dhimmi_lighter_taxes
-  Tribes: tribes_allow_gatherings, tribes_protected_faith, tribes_land_rights, tribes_tribal_registry, tribes_tribal_levies, tribes_in_administration
-  General: building_roads_rights, allow_hunting, communal_lands, market_fairs, access_to_royal_and_ecclesiastical_courts, shipwright_contracts, expansionist_zealotry, reduced_from_military_obligations, treasury_rights, elaborate_court_ceremonies
-
-Societal Values:
-  Centralization: 74
-  Serfdom: -10
-  Aristocracy: -55
-  Traditional: 38
-  Spiritualist: -66
-  Capital Econ: -25
-  Individualism: 84
-  Quality: -16
-  Offensive: 10
-  Land Focus: 33
-  Belligerent: -72
-
-============================================================
-IRE (IRE) - GP #37
-============================================================
-Ruler: Martin (47/75/64)
-Traits: loose_lips, righteous, greedy
-
-Government: monarchy | Religion: Catholic
-Stability: 79.9 | Prestige: 22.2
-Average Control: 44.3%
-
-Population: 1.02M across 20 provinces
-Income: 58.0 | Treasury: 411.4
-Tax Base: 124.2 | Loan Cap: 4,368
-
-Manpower: 2.3/2.3
-Regiments: 32
-Army Tradition: 13.6 | Navy: 7.4
-
-Tech: 132 advances
-Institutions (6): professional_armies, banking, renaissance, meritocracy, legalism, feudalism
-
-Reforms: magna_carta_reform, autocracy, royal_decree
-
-Privileges (19 total):
-  Nobles: noble_fortification_licenses, nobles_land_rights, noble_marriage_rights, auxilium_et_consilium, noble_sponsored_navy
-  Clergy: clergy_enforced_unity, clergy_literacy_rights
-  Burghers: formal_guilds
-  Tribes: tribes_allow_gatherings, tribes_land_rights, tribes_in_administration
-  General: building_roads_rights, allow_hunting, communal_lands, market_fairs, treasury_rights, elaborate_court_ceremonies, access_to_royal_and_ecclesiastical_courts, control_over_monetary_policy
-
-Societal Values:
-  Centralization: 43
-  Serfdom: 10
-  Aristocracy: -95
-  Traditional: 7
-  Spiritualist: -2
-  Capital Econ: 47
-  Individualism: 15
-  Quality: 11
-  Offensive: -20
-  Land Focus: 12
-  Belligerent: -35
-
-============================================================
-SWE (SWE) - GP #40
-============================================================
-Ruler:  (0/0/0)
-
-Government: monarchy | Religion: Catholic
-Stability: 78.8 | Prestige: 4.0
-Average Control: 30.6%
-
-Population: 1.24M across 33 provinces
-Income: 77.4 | Treasury: 60.4
-Tax Base: 123.5 | Loan Cap: 4,624
-
-Manpower: 0.0/2.0
-Regiments: 53
-Army Tradition: 28.2 | Navy: 1.5
-
-Tech: 130 advances
-Institutions (5): professional_armies, banking, renaissance, legalism, feudalism
-
-Reforms: autocracy, agricultural_cultivation, royal_decree
-
-Privileges (20 total):
-  Nobles: nobles_land_rights, noble_marriage_rights, auxilium_et_consilium, noble_fortification_licenses, noble_serfdom_rights
-  Clergy: clergy_enforced_unity, clergy_literacy_rights
-  Burghers: formal_guilds, burghers_land_rights
-  Peasants: peasants_represented_in_parliament, peasants_free_peasantry
-  Tribes: tribes_allow_gatherings
-  General: building_roads_rights, market_fairs, land_owning_farmers, access_to_royal_and_ecclesiastical_courts, treasury_rights, control_over_the_coinage, embellish_great_works_of_faith, commercial_advisory_council
-
-Societal Values:
-  Centralization: -14
-  Serfdom: 20
-  Aristocracy: -60
-  Traditional: -0
-  Spiritualist: -55
-  Capital Econ: 97
-  Individualism: 42
-  Quality: 13
-  Offensive: -17
-  Land Focus: -7
+  Quality: -37
+  Offensive: -66
+  Land Focus: -90
   Belligerent: -30
 
 ============================================================
-TUR (TUR) - GP #49
+SER (SER) - GP #12
 ============================================================
-Ruler: Muhammad (45/42/58)
-Traits: well_connected
+Ruler: Stephen.Uros (48/47/49, age 39)
+Traits: kind_hearted, zealot
+
+Government: monarchy | Religion: Orthodox
+Stability: 8.0 | Prestige: 28.9
+Average Control: 24.0%
+
+Population: 3.92M across 52 provinces
+Income: 553.5 | Treasury: 889.9
+Tax Base: 811.3 | Loan Cap: 33.1K
+
+Manpower: 18.5/21.0
+Regiments: 83
+Army Tradition: 21.4 | Navy: 13.6
+
+Tech: 162 advances
+Institutions (8): pike_and_shot, printing_press, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+
+Reforms: autocracy, royal_decree, universal_serfdom
+
+Privileges (41 total):
+  Nobles: nobles_land_rights, noble_marriage_rights, auxilium_et_consilium, noble_fortification_licenses, noble_patronage_of_the_arts, noble_serfdom_rights, primacy_of_nobility
+  Clergy: clergy_enforced_unity, clergy_literacy_rights, clergy_powerful_dioceses, clergy_strengthen_faith, clergy_religious_state
+  Burghers: formal_guilds
+  Peasants: peasants_allowed_weapons_privilege, peasants_in_administration, peasants_represented_in_parliament, peasants_free_peasantry, peasants_fewer_levies
+  Dhimmi: dhimmi_in_administration, dhimmi_pact_of_umar, dhimmi_promote_dhimmi_hierarchy, dhimmi_promote_tolerance, dhimmi_lighter_taxes
+  General: building_roads_rights, communal_lands, market_fairs, bashtinas_and_pronijas_grants, zupa_districts, gradozadanje_and_gradobljudenlje_rights, allow_trade_center_sponsorship, commercial_advisory_council, control_over_the_coinage, guild_investments, land_of_commerce, urban_development_grants, embellish_great_works_of_faith, control_over_monetary_policy, treasury_rights, promote_cultural_unity, expansionist_zealotry, reduced_from_military_obligations
+
+Societal Values:
+  Centralization: 93
+  Serfdom: -61
+  Aristocracy: -100
+  Traditional: 99
+  Spiritualist: 44
+  Capital Econ: -35
+  Individualism: 52
+  Quality: -10
+  Offensive: 40
+  Land Focus: -51
+  Belligerent: 1
+
+============================================================
+GBR (GBR) - GP #17
+============================================================
+Ruler: George (42/65/53, age 42)
+Traits: zealot, craven
 
 Government: monarchy | Religion: Sunni
-Stability: 1.8 | Prestige: 6.4
-Average Control: 16.6%
+Stability: -33.5 | Prestige: 16.6
+Average Control: 31.1%
 
-Population: 3.67M across 39 provinces
-Income: 106.4 | Treasury: 316.6
-Tax Base: 221.6 | Loan Cap: 5,679
+Population: 5.21M across 65 provinces
+Income: 292.1 | Treasury: 1,482
+Tax Base: 528.5 | Loan Cap: 23.3K
 
-Manpower: 1.1/2.6
-Regiments: 34
-Army Tradition: 25.4 | Navy: 7.5
+Manpower: 3.7/3.7
+Regiments: 66
+Army Tradition: 10.6 | Navy: 4.4
 
-Tech: 129 advances
-Institutions (6): professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+Tech: 173 advances
+Institutions (9): pike_and_shot, printing_press, new_world, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
 
-Reforms: anatolian_beylik, autocracy, legacy_of_osman, feudal_nobility, basic_timariot_system
+Reforms: magna_carta_reform, autocracy, galley_lords_reform
+
+Privileges (44 total):
+  Nobles: nobles_land_rights, noble_marriage_rights, noble_fortification_licenses, noble_serfdom_rights, noble_sponsored_navy, noble_leaders_only, nobles_protected_faith
+  Clergy: clergy_enforced_unity, clergy_in_administration, clerical_advisory_council, clergy_religious_state, clergy_strengthen_faith, clergy_protected_faith
+  Burghers: formal_guilds, burghers_protected_faith
+  Peasants: peasants_allowed_weapons_privilege, peasants_yeomanry
+  Dhimmi: dhimmi_land_rights, dhimmi_abrahamic_communities, dhimmi_in_administration, dhimmi_mazalim_court, dhimmi_military_service, dhimmi_administrative_posts, dhimmi_legal_autonomy, dhimmi_promote_tolerance, dhimmi_pact_of_umar
+  Tribes: tribes_allow_gatherings, tribes_protected_faith, tribes_land_rights, tribes_tribal_registry, tribes_tribal_levies, tribes_in_administration
+  General: building_roads_rights, allow_hunting, communal_lands, market_fairs, access_to_royal_and_ecclesiastical_courts, shipwright_contracts, expansionist_zealotry, reduced_from_military_obligations, treasury_rights, elaborate_court_ceremonies, tax_exemption, commercial_advisory_council
+
+Societal Values:
+  Centralization: 76
+  Serfdom: -15
+  Aristocracy: -55
+  Traditional: 50
+  Spiritualist: -73
+  Capital Econ: -32
+  Individualism: 84
+  Quality: -14
+  Offensive: 10
+  Land Focus: 36
+  Belligerent: -74
+
+============================================================
+TUR (TUR) - GP #42
+============================================================
+Ruler: Shata (63/45/47, age 49)
+Traits: cruel
+
+Government: monarchy | Religion: Sunni
+Stability: -38.5 | Prestige: 10.5
+Average Control: 16.0%
+
+Population: 6.01M across 51 provinces
+Income: 130.8 | Treasury: 275.8
+Tax Base: 365.6 | Loan Cap: 15.2K
+
+Manpower: 6.0/6.4
+Regiments: 39
+Army Tradition: 21.2 | Navy: 2.2
+
+Tech: 165 advances
+Institutions (7): pike_and_shot, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+
+Reforms: anatolian_beylik, autocracy, legacy_of_osman, feudal_nobility, enderun_interior_service, expanded_timariot_system
 
 Privileges (31 total):
   Nobles: nobles_land_rights, primacy_of_nobility, noble_marriage_rights, noble_sponsored_navy
@@ -383,61 +298,103 @@ Privileges (31 total):
   General: building_rights, feudal_mercenary_contracts, communal_lands, market_fairs, partial_yield, ghazi_privilege, embellish_great_works_of_faith, sponsor_maritime_contracts, elaborate_court_ceremonies, shipwright_contracts, trunk_road_to_erzurum_privilege
 
 Societal Values:
-  Centralization: 57
+  Centralization: 70
   Serfdom: 20
-  Aristocracy: -50
+  Aristocracy: -60
   Traditional: -13
   Spiritualist: -24
-  Capital Econ: 90
+  Capital Econ: 88
   Individualism: 100
-  Quality: -32
-  Offensive: -5
-  Land Focus: -34
-  Belligerent: -65
+  Quality: -28
+  Offensive: -10
+  Land Focus: -21
+  Belligerent: -67
 
 ============================================================
-SKO (SKO) - GP #69
+IRE (IRE) - GP #48
 ============================================================
-Ruler: Faiqah (31/37/30)
-Traits: careful
+Ruler: Martin (61/45/53, age 58)
+Traits: entrepreneur, inspiring_leader
+
+Government: monarchy | Religion: Catholic
+Stability: -3.6 | Prestige: 9.6
+Average Control: 49.9%
+
+Population: 1.43M across 21 provinces
+Income: 120.2 | Treasury: 372.3
+Tax Base: 233.2 | Loan Cap: 8,537
+
+Manpower: 3.8/3.9
+Regiments: 31
+Army Tradition: 16.2 | Navy: 8.1
+
+Tech: 169 advances
+Institutions (7): printing_press, professional_armies, banking, renaissance, meritocracy, legalism, feudalism
+
+Reforms: magna_carta_reform, autocracy, royal_decree
+
+Privileges (15 total):
+  Nobles: nobles_land_rights, noble_marriage_rights, auxilium_et_consilium, noble_sponsored_navy
+  Clergy: clergy_enforced_unity, clergy_literacy_rights
+  Burghers: formal_guilds
+  General: building_roads_rights, allow_hunting, communal_lands, market_fairs, treasury_rights, elaborate_court_ceremonies, access_to_royal_and_ecclesiastical_courts, control_over_monetary_policy
+
+Societal Values:
+  Centralization: 45
+  Serfdom: 10
+  Aristocracy: -100
+  Traditional: 7
+  Spiritualist: -8
+  Capital Econ: 42
+  Individualism: 15
+  Quality: 15
+  Offensive: -20
+  Land Focus: 14
+  Belligerent: -27
+
+============================================================
+SKO (SKO) - GP #54
+============================================================
+Ruler: Usuman (40/58/52, age 35)
+Traits: benevolent, calm
 
 Government: monarchy | Religion: Sunni
-Stability: -22.9 | Prestige: 5.7
-Average Control: 36.7%
+Stability: 5.2 | Prestige: 12.2
+Average Control: 33.5%
 
-Population: 2.45M across 20 provinces
-Income: 39.4 | Treasury: 53.5
-Tax Base: 97.1 | Loan Cap: 2,615
+Population: 3.50M across 24 provinces
+Income: 96.8 | Treasury: 100.8
+Tax Base: 178.5 | Loan Cap: 7,777
 
-Manpower: 0.3/0.3
-Regiments: 0
-Army Tradition: 18.2 | Navy: 0.0
+Manpower: 1.5/1.6
+Regiments: 10
+Army Tradition: 17.0 | Navy: 4.8
 
-Tech: 105 advances
-Institutions (4): professional_armies, renaissance, legalism, feudalism
+Tech: 142 advances
+Institutions (6): professional_armies, banking, renaissance, meritocracy, legalism, feudalism
 
-Reforms: autocracy, privy_council
+Reforms: autocracy, privy_council, the_espionage_act
 
-Privileges (29 total):
+Privileges (30 total):
   Nobles: nobles_land_rights, noble_marriage_rights, noble_leaders_only, noble_serfdom_rights, primacy_of_nobility, noble_patronage_of_the_arts
   Clergy: clergy_strengthen_faith, clergy_literacy_rights, clergy_religious_state, clergy_land_rights
   Burghers: formal_guilds, burghers_land_rights
   Peasants: peasants_allowed_weapons_privilege, peasants_in_administration
   Tribes: tribes_tribal_levies, tribes_land_rights, tribes_allow_gatherings
-  General: building_roads_rights, allow_hunting, trade_monopolies, communal_lands, market_fairs, building_rights, commercial_advisory_council, freedom_of_interpretation, control_over_monetary_policy, guild_investments, elaborate_court_ceremonies, allow_trade_center_sponsorship
+  General: building_roads_rights, allow_hunting, communal_lands, market_fairs, building_rights, commercial_advisory_council, freedom_of_interpretation, control_over_monetary_policy, guild_investments, elaborate_court_ceremonies, allow_trade_center_sponsorship, urban_development_grants, sponsor_maritime_contracts
 
 Societal Values:
-  Centralization: 77
-  Serfdom: -89
-  Aristocracy: -99
-  Traditional: 67
-  Spiritualist: 2
-  Capital Econ: -30
-  Individualism: 60
+  Centralization: 99
+  Serfdom: -91
+  Aristocracy: -100
+  Traditional: 78
+  Spiritualist: 18
+  Capital Econ: -31
+  Individualism: 70
   Quality: -24
   Offensive: -12
-  Land Focus: -62
-  Belligerent: -40
+  Land Focus: -67
+  Belligerent: -28
 
 ============================================================
 END OF DETAILED PROFILES

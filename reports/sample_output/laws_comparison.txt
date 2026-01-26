@@ -1,52 +1,78 @@
 =======================================================
 EU5 LAWS COMPARISON
 =======================================================
-Save: 1433.1.1 | Players: 10
+Save: 1469.1.1 | Players: 9
 
 -------------------------------------------------------
 Administration
 -------------------------------------------------------
-  Central Councils: MLO, FRA, SER, GBR, IRE
-  Feudal Administration: BOH, SWE, TUR, SKO
-  Autonomous Councils: POL
+  Central Councils: FRA, ITA, SER, GBR, IRE
+  Feudal Administration: BOH, TUR, SKO
+  Confederal Union: PLC
+
+-------------------------------------------------------
+Battle Leadership Law
+-------------------------------------------------------
+  Meritocratic Leadership: FRA
 
 -------------------------------------------------------
 Bureaucracy Law
 -------------------------------------------------------
-  Decentralized Bureaucracy: MLO, FRA, POL, SER, GBR, IRE
+  Decentralized Bureaucracy: FRA, BOH, ITA, PLC, SER, GBR, TUR, IRE
+
+-------------------------------------------------------
+Burghers Rights Laws
+-------------------------------------------------------
+  Colonial Burghers Authority: GBR
+
+-------------------------------------------------------
+Cabinet Laws
+-------------------------------------------------------
+  Nobles Of The Robe: BOH
 
 -------------------------------------------------------
 Censorship
 -------------------------------------------------------
-  No Censorship: BOH, FRA, SER, GBR, SKO
-  Limited Censorship: MLO, IRE, SWE, TUR
-  Strict Censorship: POL
+  No Censorship: FRA, BOH, SER, GBR, SKO
+  Limited Censorship: ITA, TUR, IRE
+  Strict Censorship: PLC
+
+-------------------------------------------------------
+Colonial Policy
+-------------------------------------------------------
+  Settled Colonies: GBR
 
 -------------------------------------------------------
 Cultural Traditions
 -------------------------------------------------------
-  Martial Society: BOH, POL, GBR, IRE, SWE, TUR, SKO
-  Civil Society: MLO, FRA, SER
+  Martial Society: BOH, PLC, GBR, TUR, IRE, SKO
+  Civil Society: FRA, ITA, SER
 
 -------------------------------------------------------
 Distribution of Power
 -------------------------------------------------------
-  Dop Favor The Ruler: MLO, FRA, POL, SER, IRE, SWE, SKO
+  Dop Favor The Ruler: FRA, ITA, PLC, SER, IRE, SKO
   Dop Favor The Commoners: BOH
   Dop Law English Parliament: GBR
   Dop Traditional Distribution Of Power: TUR
 
 -------------------------------------------------------
+Divine Cause Law
+-------------------------------------------------------
+  Pursuit Of Knowledge: PLC
+
+-------------------------------------------------------
 Education Elites Law
 -------------------------------------------------------
-  Education Of The People: MLO, BOH, FRA, SER, GBR
-  Education Of The Missionaries: POL
+  Education Of The People: FRA, BOH, ITA, SER, GBR, SKO
+  Education Of The Missionaries: PLC
+  Mixed Institutions: TUR
 
 -------------------------------------------------------
 Education
 -------------------------------------------------------
-  Basic Religious Education: MLO, BOH, POL, SER, GBR, IRE, SWE, TUR, SKO
-  Theocratic Education: FRA
+  Basic Religious Education: BOH, ITA, PLC, GBR, TUR, IRE, SKO
+  Theocratic Education: FRA, SER
 
 -------------------------------------------------------
 Eng Order Of The Garter Law
@@ -56,8 +82,8 @@ Eng Order Of The Garter Law
 -------------------------------------------------------
 Succession Law
 -------------------------------------------------------
-  By Tradition: MLO, BOH, FRA, SER, GBR, IRE
-  By Blood: SWE, TUR, SKO
+  By Tradition: FRA, BOH, ITA, SER, IRE
+  By Blood: GBR, TUR, SKO
 
 -------------------------------------------------------
 Fra Taille
@@ -72,19 +98,19 @@ Harem Law
 -------------------------------------------------------
 Heir Religion
 -------------------------------------------------------
-  Heir Same Religion: MLO, POL, GBR, SWE, TUR
   Heir Any Religion: FRA, SER, IRE, SKO
+  Heir Same Religion: ITA, PLC, GBR, TUR
   Heir Same Religion Group: BOH
 
 -------------------------------------------------------
 Holy Mission Law
 -------------------------------------------------------
-  Internal Mission: POL
+  Internal Mission: PLC
 
 -------------------------------------------------------
 Immigration
 -------------------------------------------------------
-  Open Borders Law: MLO, BOH, FRA, POL, SER, GBR, IRE, SWE, TUR, SKO
+  Open Borders Law: FRA, BOH, ITA, PLC, SER, GBR, TUR, IRE, SKO
 
 -------------------------------------------------------
 Inquisition Law
@@ -94,55 +120,61 @@ Inquisition Law
 -------------------------------------------------------
 Iqta Law
 -------------------------------------------------------
-  Efficient Tax Farming: POL, TUR, SKO
+  Efficient Tax Farming: PLC, TUR, SKO
   Land Acquisition: GBR
 
 -------------------------------------------------------
 Language Of Pleading
 -------------------------------------------------------
-  Language Of Pleading Court: BOH, POL
+  Language Of Pleading Court: BOH, PLC
 
 -------------------------------------------------------
 Legal Code
 -------------------------------------------------------
-  Civil Law: MLO, SER, SWE
   Traditional Law: FRA, SKO
+  Civil Law: ITA, SER
   Common Law: GBR, IRE
   Maiestas Carolina: BOH
-  Piotrokow Wislica Statutes: POL
+  Piotrokow Wislica Statutes: PLC
   Sharia Law: TUR
 
 -------------------------------------------------------
 Maritime Policy
 -------------------------------------------------------
-  Protect Trade Routes: MLO, FRA, SER, GBR, SWE, TUR, SKO
-  Mandatory Impressment: BOH, POL, IRE
+  Protect Trade Routes: FRA, ITA, GBR, TUR, SKO
+  Mandatory Impressment: BOH, PLC, IRE
+  Shipwright Standard Regulation: SER
 
 -------------------------------------------------------
 Marriage Law
 -------------------------------------------------------
-  Monogamous Marriage: MLO, BOH, FRA, SER, IRE, SWE, SKO
-  Muslim Marriage: POL, GBR, TUR
+  Monogamous Marriage: FRA, BOH, ITA, SER, IRE, SKO
+  Muslim Marriage: PLC, GBR, TUR
 
 -------------------------------------------------------
 Military Levy
 -------------------------------------------------------
-  Peasant Levies: MLO, IRE, SWE, TUR
-  Noble Levies: BOH, FRA, SER, SKO
+  Peasant Levies: ITA, SER, TUR, IRE
+  Noble Levies: FRA, BOH, SKO
   Longbow Competitions: GBR
 
 -------------------------------------------------------
 Mining Rights
 -------------------------------------------------------
-  Nobles Mining Law: MLO, BOH, SER, IRE, SWE, TUR
-  Burghers Mining Law: FRA, POL, GBR, SKO
+  Nobles Mining Law: BOH, ITA, SER, TUR, IRE
+  Burghers Mining Law: FRA, PLC, GBR, SKO
+
+-------------------------------------------------------
+Native Policy
+-------------------------------------------------------
+  Native Trade: GBR
 
 -------------------------------------------------------
 Nobles Rights Laws
 -------------------------------------------------------
-  Rural Nobles Authority: POL, SER, GBR
-  Curtail Nobles: BOH, FRA
-  Nobles Electorate: MLO
+  Rural Nobles Authority: BOH, PLC, SER, GBR
+  Curtail Nobles: FRA
+  Nobles Electorate: ITA
 
 -------------------------------------------------------
 Patriarchate Law
@@ -152,27 +184,29 @@ Patriarchate Law
 -------------------------------------------------------
 Piracy Policy
 -------------------------------------------------------
-  Anti Piracy: MLO, BOH, FRA, POL, SER, GBR, IRE, SWE, TUR, SKO
+  Anti Piracy: FRA, BOH, ITA, PLC, SER, TUR, IRE, SKO
+  State Piracy: GBR
 
 -------------------------------------------------------
 Precious Metal Distribution Law
 -------------------------------------------------------
-  Regulated Gold Export: MLO, POL, GBR, IRE, SKO
-  Unlimited Gold Export: BOH, FRA, SER, TUR
+  Regulated Gold Export: ITA, PLC, GBR, IRE, SKO
+  Unlimited Gold Export: FRA, BOH, SER, TUR
 
 -------------------------------------------------------
 Recruitment Law
 -------------------------------------------------------
-  Expanded Levies: MLO, FRA
-  Noble Levies: BOH, SER
+  Noble Levies: BOH, PLC, SER
+  Expanded Levies: FRA, ITA
   Burghers Levies: GBR
+  Devshirme System: TUR
 
 -------------------------------------------------------
 Court Customs
 -------------------------------------------------------
-  Aristocratic Court: BOH, SER, SWE
   Court Of Culture: FRA, GBR, SKO
-  Itinerant Court: MLO, IRE
+  Itinerant Court: BOH, ITA, IRE
+  Aristocratic Court: SER
   Harem: TUR
 
 -------------------------------------------------------
@@ -183,65 +217,21 @@ Sharia Law
 -------------------------------------------------------
 Slave Conversion
 -------------------------------------------------------
-  Allow Slave Religion: MLO, TUR, SKO
+  Allow Slave Religion: ITA, TUR, SKO
   Force Slave Conversion: GBR
 
 -------------------------------------------------------
 Theocratic Leadership
 -------------------------------------------------------
-  Clerical State: POL
+  Clerical State: PLC
 
 =======================================================
 LAWS BY COUNTRY
 -------------------------------------------------------
 
-MLO (21 laws):
+FRA (23 laws):
   Administration: Central Councils
-  bureaucracy law: Decentralized Bureaucracy Policy
-  Censorship: Limited Censorship
-  Cultural Traditions: Civil Society
-  Distribution of Power: Dop Favor The Ruler
-  education elites law: Education Of The People
-  Education: Basic Religious Education
-  Succession Law: By Tradition
-  Heir Religion: Heir Same Religion
-  Immigration: Open Borders Law
-  Legal Code: Civil Law Policy
-  Maritime Policy: Protect Trade Routes
-  Marriage Law: Monogamous Marriage
-  Military Levy: Peasant Levies
-  Mining Rights: Nobles Mining Law
-  nobles rights laws: Nobles Electorate Policy
-  Piracy Policy: Anti Piracy Policy
-  precious metal distribution law: Regulated Gold Export
-  recruitment law: Expanded Levies Policy
-  Court Customs: Itinerant Court Policy
-  slave conversion: Allow Slave Religion
-
-BOH (20 laws):
-  Administration: Feudal Administration
-  Censorship: No Censorship
-  Cultural Traditions: Martial Society
-  Distribution of Power: Dop Favor The Commoners
-  education elites law: Education Of The People
-  Education: Basic Religious Education
-  Succession Law: By Tradition
-  Heir Religion: Heir Same Religion Group
-  Immigration: Open Borders Law
-  language of pleading: Language Of Pleading Court
-  Legal Code: Maiestas Carolina
-  Maritime Policy: Mandatory Impressment
-  Marriage Law: Monogamous Marriage
-  Military Levy: Noble Levies
-  Mining Rights: Nobles Mining Law
-  nobles rights laws: Curtail Nobles Policy
-  Piracy Policy: Anti Piracy Policy
-  precious metal distribution law: Unlimited Gold Export
-  recruitment law: Noble Levies Policy
-  Court Customs: Aristocratic Court Policy
-
-FRA (22 laws):
-  Administration: Central Councils
+  battle leadership law: Meritocratic Leadership Policy
   bureaucracy law: Decentralized Bureaucracy Policy
   Censorship: No Censorship
   Cultural Traditions: Civil Society
@@ -264,12 +254,60 @@ FRA (22 laws):
   recruitment law: Expanded Levies Policy
   Court Customs: Court Of Culture Policy
 
-POL (20 laws):
-  Administration: Autonomous Councils
+BOH (22 laws):
+  Administration: Feudal Administration
+  bureaucracy law: Decentralized Bureaucracy Policy
+  cabinet laws: Nobles Of The Robe Policy
+  Censorship: No Censorship
+  Cultural Traditions: Martial Society
+  Distribution of Power: Dop Favor The Commoners
+  education elites law: Education Of The People
+  Education: Basic Religious Education
+  Succession Law: By Tradition
+  Heir Religion: Heir Same Religion Group
+  Immigration: Open Borders Law
+  language of pleading: Language Of Pleading Court
+  Legal Code: Maiestas Carolina
+  Maritime Policy: Mandatory Impressment
+  Marriage Law: Monogamous Marriage
+  Military Levy: Noble Levies
+  Mining Rights: Nobles Mining Law
+  nobles rights laws: Rural Nobles Authority Policy
+  Piracy Policy: Anti Piracy Policy
+  precious metal distribution law: Unlimited Gold Export
+  recruitment law: Noble Levies Policy
+  Court Customs: Itinerant Court Policy
+
+ITA (21 laws):
+  Administration: Central Councils
+  bureaucracy law: Decentralized Bureaucracy Policy
+  Censorship: Limited Censorship
+  Cultural Traditions: Civil Society
+  Distribution of Power: Dop Favor The Ruler
+  education elites law: Education Of The People
+  Education: Basic Religious Education
+  Succession Law: By Tradition
+  Heir Religion: Heir Same Religion
+  Immigration: Open Borders Law
+  Legal Code: Civil Law Policy
+  Maritime Policy: Protect Trade Routes
+  Marriage Law: Monogamous Marriage
+  Military Levy: Peasant Levies
+  Mining Rights: Nobles Mining Law
+  nobles rights laws: Nobles Electorate Policy
+  Piracy Policy: Anti Piracy Policy
+  precious metal distribution law: Regulated Gold Export
+  recruitment law: Expanded Levies Policy
+  Court Customs: Itinerant Court Policy
+  slave conversion: Allow Slave Religion
+
+PLC (22 laws):
+  Administration: Confederal Union
   bureaucracy law: Decentralized Bureaucracy Policy
   Censorship: Strict Censorship
   Cultural Traditions: Martial Society
   Distribution of Power: Dop Favor The Ruler
+  divine cause law: Pursuit Of Knowledge Policy
   education elites law: Education Of The Missionaries
   Education: Basic Religious Education
   Heir Religion: Heir Same Religion
@@ -284,6 +322,7 @@ POL (20 laws):
   nobles rights laws: Rural Nobles Authority Policy
   Piracy Policy: Anti Piracy Policy
   precious metal distribution law: Regulated Gold Export
+  recruitment law: Noble Levies Policy
   theocratic leadership: Clerical State
 
 SER (21 laws):
@@ -293,14 +332,14 @@ SER (21 laws):
   Cultural Traditions: Civil Society
   Distribution of Power: Dop Favor The Ruler
   education elites law: Education Of The People
-  Education: Basic Religious Education
+  Education: Theocratic Education
   Succession Law: By Tradition
   Heir Religion: Heir Any Religion
   Immigration: Open Borders Law
   Legal Code: Civil Law Policy
-  Maritime Policy: Protect Trade Routes
+  Maritime Policy: Shipwright Standard Regulation
   Marriage Law: Monogamous Marriage
-  Military Levy: Noble Levies
+  Military Levy: Peasant Levies
   Mining Rights: Nobles Mining Law
   nobles rights laws: Rural Nobles Authority Policy
   patriarchate law: State Patriarchate Policy
@@ -309,16 +348,18 @@ SER (21 laws):
   recruitment law: Noble Levies Policy
   Court Customs: Aristocratic Court Policy
 
-GBR (23 laws):
+GBR (26 laws):
   Administration: Central Councils
   bureaucracy law: Decentralized Bureaucracy Policy
+  burghers rights laws: Colonial Burghers Authority Policy
   Censorship: No Censorship
+  colonial policy: Settled Colonies
   Cultural Traditions: Martial Society
   Distribution of Power: Dop Law English Parliament
   education elites law: Education Of The People
   Education: Basic Religious Education
   eng order of the garter law: Eng Order Of The Garter Clergy Policy
-  Succession Law: By Tradition
+  Succession Law: By Blood
   Heir Religion: Heir Same Religion
   Immigration: Open Borders Law
   iqta law: Land Acquisition
@@ -327,12 +368,38 @@ GBR (23 laws):
   Marriage Law: Muslim Marriage
   Military Levy: Longbow Competitions
   Mining Rights: Burghers Mining Law
+  native policy: Native Trade
   nobles rights laws: Rural Nobles Authority Policy
-  Piracy Policy: Anti Piracy Policy
+  Piracy Policy: State Piracy Policy
   precious metal distribution law: Regulated Gold Export
   recruitment law: Burghers Levies Policy
   Court Customs: Court Of Culture Policy
   slave conversion: Force Slave Conversion
+
+TUR (23 laws):
+  Administration: Feudal Administration
+  bureaucracy law: Decentralized Bureaucracy Policy
+  Censorship: Limited Censorship
+  Cultural Traditions: Martial Society
+  Distribution of Power: Dop Traditional Distribution Of Power
+  education elites law: Mixed Institutions
+  Education: Basic Religious Education
+  Succession Law: By Blood
+  harem law: Secluded Harem Policy
+  Heir Religion: Heir Same Religion
+  Immigration: Open Borders Law
+  iqta law: Efficient Tax Farming
+  Legal Code: Sharia Law Policy
+  Maritime Policy: Protect Trade Routes
+  Marriage Law: Muslim Marriage
+  Military Levy: Peasant Levies
+  Mining Rights: Nobles Mining Law
+  Piracy Policy: Anti Piracy Policy
+  precious metal distribution law: Unlimited Gold Export
+  recruitment law: Devshirme System Policy
+  Court Customs: Harem Policy
+  sharia law: Hanafi Policy
+  slave conversion: Allow Slave Religion
 
 IRE (17 laws):
   Administration: Central Councils
@@ -353,50 +420,12 @@ IRE (17 laws):
   precious metal distribution law: Regulated Gold Export
   Court Customs: Itinerant Court Policy
 
-SWE (15 laws):
-  Administration: Feudal Administration
-  Censorship: Limited Censorship
-  Cultural Traditions: Martial Society
-  Distribution of Power: Dop Favor The Ruler
-  Education: Basic Religious Education
-  Succession Law: By Blood
-  Heir Religion: Heir Same Religion
-  Immigration: Open Borders Law
-  Legal Code: Civil Law Policy
-  Maritime Policy: Protect Trade Routes
-  Marriage Law: Monogamous Marriage
-  Military Levy: Peasant Levies
-  Mining Rights: Nobles Mining Law
-  Piracy Policy: Anti Piracy Policy
-  Court Customs: Aristocratic Court Policy
-
-TUR (20 laws):
-  Administration: Feudal Administration
-  Censorship: Limited Censorship
-  Cultural Traditions: Martial Society
-  Distribution of Power: Dop Traditional Distribution Of Power
-  Education: Basic Religious Education
-  Succession Law: By Blood
-  harem law: Secluded Harem Policy
-  Heir Religion: Heir Same Religion
-  Immigration: Open Borders Law
-  iqta law: Efficient Tax Farming
-  Legal Code: Sharia Law Policy
-  Maritime Policy: Protect Trade Routes
-  Marriage Law: Muslim Marriage
-  Military Levy: Peasant Levies
-  Mining Rights: Nobles Mining Law
-  Piracy Policy: Anti Piracy Policy
-  precious metal distribution law: Unlimited Gold Export
-  Court Customs: Harem Policy
-  sharia law: Hanafi Policy
-  slave conversion: Allow Slave Religion
-
-SKO (18 laws):
+SKO (19 laws):
   Administration: Feudal Administration
   Censorship: No Censorship
   Cultural Traditions: Martial Society
   Distribution of Power: Dop Favor The Ruler
+  education elites law: Education Of The People
   Education: Basic Religious Education
   Succession Law: By Blood
   Heir Religion: Heir Any Religion

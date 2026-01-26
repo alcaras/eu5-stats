@@ -1,195 +1,195 @@
 =======================================================
 EU5 MP SESSION REPORT
 =======================================================
-Save: 1433.1.1 | Players: 10
-Generated: 2026-01-19 17:54
+Save: 1469.1.1 | Players: 9
+Generated: 2026-01-26 07:54
 
 =======================================================
 GREAT POWER RANKINGS
 -------------------------------------------------------
 #  Tag  GP  Pop     Income  TaxBase 
 -------------------------------------------------------
-1  MLO  2   3.72M   583.5   987.6   
-2  BOH  3   3.78M   1,087   1,790   
-3  FRA  12  5.53M   439.1   542.6   
-4  POL  17  2.42M   175.7   367.5   
-5  SER  19  2.57M   182.2   280.3   
-6  GBR  22  4.11M   137.2   319.2   
-7  IRE  37  1.02M   58.0    124.2   
-8  SWE  40  1.24M   77.4    123.5   
-9  TUR  49  3.67M   106.4   221.6   
-10 SKO  69  2.45M   39.4    97.1    
+1  FRA  2   12.35M  827.1   1,168   
+2  BOH  3   5.71M   1,632   2,815   
+3  ITA  4   8.06M   1,039   1,947   
+4  PLC  11  3.44M   436.9   696.2   
+5  SER  12  3.92M   553.5   811.3   
+6  GBR  17  5.21M   292.1   528.5   
+7  TUR  42  6.01M   130.8   365.6   
+8  IRE  48  1.43M   120.2   233.2   
+9  SKO  54  3.50M   96.8    178.5   
 
 =======================================================
 RULERS (sorted by total stats)
 -------------------------------------------------------
-Tag  A   D   M   Tot  Name        Traits              
+Tag  A   D   M   Tot  Age  Name           
 -------------------------------------------------------
-FRA  100 93  100 293  Louis       tactical_genius, ind
-IRE  47  75  64  186  Martin      loose_lips, righteou
-BOH  58  51  51  160  Sigmund     drunkard, calm
-TUR  45  42  58  145  Muhammad    well_connected
-SER  42  40  53  135  Boleslava   bold_fighter
-GBR  41  1   85  127  Gerard      embezzler
-MLO  30  24  49  103  Paul        scholar, industrious
-SKO  31  37  30  98   Faiqah      careful
-POL  29  24  25  78   Casimir     entrepreneur
-SWE  0   0   0   0                
+ITA  98  92  97  287  48   Beatrix [Reg]  
+PLC  81  96  75  252  18   Casimir        
+FRA  82  58  44  184  41   Charles        
+BOH  50  48  63  161  54   Henry          
+GBR  42  65  53  160  42   George         
+IRE  61  45  53  159  58   Martin         
+TUR  63  45  47  155  49   Shata          
+SKO  40  58  52  150  35   Usuman         
+SER  48  47  49  144  39   Stephen.Uros   
+
+Ruler Traits:
+  FRA: naive
+  BOH: zealot, well_advised
+  GBR: zealot, craven
+  IRE: entrepreneur, inspiring_leader
+  TUR: cruel
+  SKO: benevolent, calm
+  SER: kind_hearted, zealot
+
+Regencies:
+  ITA: Regent Beatrix (98/92/97, age 48)
 
 =======================================================
 ECONOMY (by income)
 -------------------------------------------------------
 Tag  Income   Treasury  TaxBase  LoanCap  
 -------------------------------------------------------
-BOH  1,087    10.7K     1,790    62.2K    
-MLO  583.5    838.7     987.6    29.2K    
-FRA  439.1    5,179     542.6    27.7K    
-SER  182.2    511.1     280.3    13.0K    
-POL  175.7    1,499     367.5    14.4K    
-GBR  137.2    216.3     319.2    13.2K    
-TUR  106.4    316.6     221.6    5,679    
-SWE  77.4     60.4      123.5    4,624    
-IRE  58.0     411.4     124.2    4,368    
-SKO  39.4     53.5      97.1     2,615    
+BOH  1,632    2,189     2,815    107.2K   
+ITA  1,039    441.4     1,947    74.7K    
+FRA  827.1    7,169     1,168    39.4K    
+SER  553.5    889.9     811.3    33.1K    
+PLC  436.9    1,431     696.2    30.3K    
+GBR  292.1    1,482     528.5    23.3K    
+TUR  130.8    275.8     365.6    15.2K    
+IRE  120.2    372.3     233.2    8,537    
+SKO  96.8     100.8     178.5    7,777    
 
 =======================================================
 POPULATION
 -------------------------------------------------------
 Tag  Pop       Provs  Pop/Prov  
 -------------------------------------------------------
-FRA  5.53M     44     0.13M     
-GBR  4.11M     59     69.7K     
-BOH  3.78M     32     0.12M     
-MLO  3.72M     35     0.11M     
-TUR  3.67M     39     94.1K     
-SER  2.57M     40     64.2K     
-SKO  2.45M     20     0.12M     
-POL  2.42M     43     56.3K     
-SWE  1.24M     33     37.6K     
-IRE  1.02M     20     51.1K     
+FRA  12.35M    78     0.16M     
+ITA  8.06M     59     0.14M     
+TUR  6.01M     51     0.12M     
+BOH  5.71M     48     0.12M     
+GBR  5.21M     65     80.1K     
+SER  3.92M     52     75.4K     
+SKO  3.50M     24     0.15M     
+PLC  3.44M     53     64.9K     
+IRE  1.43M     21     68.0K     
 
 =======================================================
 MILITARY (by regiments)
 -------------------------------------------------------
 Tag  Regs  MP     MaxMP  ArmyT  NavyT  
 -------------------------------------------------------
-BOH  172   48.6   49.2   18.8   2.2    
-MLO  129   35.4   35.7   11.3   8.8    
-SER  70    9.6    9.6    18.1   2.6    
-FRA  67    13.1   15.4   32.9   0.0    
-SWE  53    0.0    2.0    28.2   1.5    
-POL  36    8.5    8.5    26.7   3.5    
-TUR  34    1.1    2.6    25.4   7.5    
-IRE  32    2.3    2.3    13.6   7.4    
-GBR  20    2.1    2.1    16.0   10.9   
-SKO  0     0.3    0.3    18.2   0.0    
+ITA  235   32.7   60.2   11.3   9.6    
+BOH  172   71.1   72.1   25.8   2.6    
+FRA  115   35.7   49.2   27.3   13.0   
+SER  83    18.5   21.0   21.4   13.6   
+GBR  66    3.7    3.7    10.6   4.4    
+PLC  43    13.0   13.1   11.9   0.0    
+TUR  39    6.0    6.4    21.2   2.2    
+IRE  31    3.8    3.9    16.2   8.1    
+SKO  10    1.5    1.6    17.0   4.8    
 
 =======================================================
 PRODUCTION
 -------------------------------------------------------
 Tag  Total   Top 3 Goods                             
 -------------------------------------------------------
-MLO  2,266   wheat:208, lumber:188, livestock:179
-BOH  2,165   lumber:151, wheat:140, silver:120
-FRA  1,404   wheat:112, lumber:111, tools:100
-GBR  1,059   wool:123, wheat:71, lumber:48
-POL  837.9   wool:91, iron:51, tools:49
-SER  761.4   lumber:47, silver:46, tools:41
-TUR  635.4   lumber:48, silk:42, fish:30
-SWE  467.4   lumber:79, fish:41, wild_game:39
-SKO  418.2   livestock:28, cloth:28, lumber:23
-IRE  284.4   wheat:36, livestock:35, beeswax:17
+ITA  4,710   lumber:458, wheat:353, cloth:330
+BOH  3,464   livestock:263, lumber:223, wheat:222
+FRA  2,778   lumber:207, tools:199, wheat:175
+SER  1,637   lumber:115, tools:95, livestock:88
+PLC  1,491   wool:150, lumber:113, iron:93
+GBR  1,319   wool:134, wheat:84, lumber:79
+TUR  1,186   lumber:79, silk:65, wool:57
+SKO  587.7   lumber:51, livestock:36, cloth:34
+IRE  464.9   wheat:46, livestock:45, wool:35
 
 =======================================================
 TECHNOLOGY
 -------------------------------------------------------
 Tag  Advs  Inst Missing/Extra                      
 -------------------------------------------------------
-GBR  141   6    (complete)
-MLO  141   6    (complete)
-BOH  136   6    (complete)
-POL  134   6    (complete)
-FRA  133   6    (complete)
-IRE  132   6    (complete)
-SWE  130   5    -meritocracy
-SER  130   6    (complete)
-TUR  129   6    (complete)
-SKO  105   4    -banking, -meritocracy
+PLC  177   9    (complete)
+ITA  174   9    (complete)
+GBR  173   9    (complete)
+FRA  169   9    (complete)
+IRE  169   7    -new_world, -pike_and_shot
+BOH  168   9    (complete)
+TUR  165   7    -new_world, -printing_press
+SER  162   8    -new_world
+SKO  142   6    -new_world, -pike_and_shot, -printi
 
 =======================================================
 GOVERNMENT & RELIGION
 -------------------------------------------------------
 Tag  Type      Religion  Stab   Prest  
 -------------------------------------------------------
-MLO  monarchy  Catholic  73.7   1.6    
-BOH  monarchy  Hussite   43.3   28.9   
-FRA  monarchy  Catholic  11.9   46.3   
-POL  theocracy Sunni     -11.7  0.1    
-SER  monarchy  Orthodox  24.7   3.1    
-GBR  monarchy  Sunni     -21.8  22.3   
-IRE  monarchy  Catholic  79.9   22.2   
-SWE  monarchy  Catholic  78.8   4.0    
-TUR  monarchy  Sunni     1.8    6.4    
-SKO  monarchy  Sunni     -22.9  5.7    
+FRA  monarchy  Catholic  40.6   44.7   
+BOH  monarchy  Hussite   35.8   21.0   
+ITA  monarchy  Catholic  44.6   30.3   
+PLC  theocracy Sunni     12.6   0.0    
+SER  monarchy  Orthodox  8.0    28.9   
+GBR  monarchy  Sunni     -33.5  16.6   
+TUR  monarchy  Sunni     -38.5  10.5   
+IRE  monarchy  Catholic  -3.6   9.6    
+SKO  monarchy  Sunni     5.2    12.2   
 
 =======================================================
 CONTROL (avg across all locations)
 -------------------------------------------------------
 Tag  Control   Provs  
 -------------------------------------------------------
-BOH  54.9      32     
-MLO  52.6      35     
-IRE  44.3      20     
-FRA  39.4      44     
-SKO  36.7      20     
-SWE  30.6      33     
-POL  25.9      43     
-GBR  24.5      59     
-SER  19.4      40     
-TUR  16.6      39     
+BOH  58.6      48     
+IRE  49.9      21     
+ITA  46.0      59     
+FRA  37.6      78     
+PLC  37.0      53     
+SKO  33.5      24     
+GBR  31.1      65     
+SER  24.0      52     
+TUR  16.0      51     
 
 =======================================================
 SUBJECTS (with combined totals)
 -------------------------------------------------------
 Tag  #  Subjects            TotPop   TotTax   
 -------------------------------------------------------
-MLO  39 PIS,SIE,AAA20,AAA69...7.82M    2,189    
-POL  34 PLK,ABA00,AAA34,AAA53...4.98M    904.5    
-SER  19 VID,AAA33,AAA16,AAA52...5.23M    847.5    
-BOH  18 SWB,ABA01,ABA02,ABA03...6.21M    2,468    
-FRA  17 BRI,AMG,COM,VLN...  9.52M    1,567    
-GBR  6  IRE,GWR,EWY,LOI...  5.30M    464.0    
-SKO  5  TEN,AAA99,ABA05,OYO...3.36M    152.0    
-SWE  3  AAA47,ABA15,ABA34   2.21M    205.5    
-TUR  3  ERE,ARM,TDJ         5.45M    414.5    
-IRE  1  DMS                 1.16M    149.5    
+PLC  30 AAA53,KUR,ABA39,ABA57...6.36M    1,505    
+SER  22 AAA16,AAA52,KNI,TRA...8.11M    1,849    
+ITA  21 GAZ,AAA98,AAA32,ABA23...10.00M   2,723    
+BOH  15 ABA02,ABA03,GSW,WOL...8.66M    3,701    
+FRA  12 AMG,COM,VLN,NRB...  15.97M   2,253    
+SKO  7  TEN,AAA99,ABA05,OYO...4.95M    283.5    
+GBR  4  IRE,LOI,AAA60,ABA63 6.82M    777.3    
+TUR  3  ARM,HCI,KBD         6.47M    425.9    
+IRE  0  -                   1.43M    233.2    
 
 =======================================================
 VALUES (cent/serf/arist/trad/spirit)
 -------------------------------------------------------
-MLO    100   20  -76   56  -59
-BOH     90 -100 -100   96 -100
-FRA     71  -55  -77   71   17
-POL    100  -71 -100  100 -100
-SER     80  -53  -69   61   -1
-GBR     74  -10  -55   38  -66
-IRE     43   10  -95    7   -2
-SWE    -14   20  -60   -0  -55
-TUR     57   20  -50  -13  -24
-SKO     77  -89  -99   67    2
+FRA     80   45  -72   77   28
+BOH    100 -100 -100   96 -100
+ITA     99   20  -86   68  -74
+PLC    100  -73 -100  100 -100
+SER     93  -61 -100   99   44
+GBR     76  -15  -55   50  -73
+TUR     70   20  -60  -13  -24
+IRE     45   10 -100    7   -8
+SKO     99  -91 -100   78   18
 
 VALUES (capital/indiv/qual/offen/land/bell)
 -------------------------------------------------------
-MLO    -28   12   12  -15   23   29
-BOH    100   98  -30   39  -96  -49
-FRA     69   60  -37    8  -64   35
-POL    -39  100  -35  -57  -85  -63
-SER    -17   57  -19   39  -56  -18
-GBR    -25   84  -16   10   33  -72
-IRE     47   15   11  -20   12  -35
-SWE     97   42   13  -17   -7  -30
-TUR     90  100  -32   -5  -34  -65
-SKO    -30   60  -24  -12  -62  -40
+FRA     55   60  -47   -3  -56   40
+BOH    100  100  -30   39 -100  -55
+ITA    -30   12   12  -12   27   35
+PLC    -39  100  -37  -66  -90  -30
+SER    -35   52  -10   40  -51    1
+GBR    -32   84  -14   10   36  -74
+TUR     88  100  -28  -10  -21  -67
+IRE     42   15   15  -20   14  -27
+SKO    -31   70  -24  -12  -67  -28
 
 =======================================================
 END OF SUMMARY

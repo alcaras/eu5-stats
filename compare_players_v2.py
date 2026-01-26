@@ -16,21 +16,35 @@ import matplotlib.ticker as ticker
 SCRIPT_DIR = Path(__file__).parent.resolve()
 
 
-def load_human_countries() -> dict[str, str]:
-    """Load human-controlled countries from HUMANS.txt"""
+def load_human_countries() -> list[list[str]]:
+    """Load human-controlled countries from HUMANS.txt.
+
+    Each line can contain multiple tags (space-separated) representing
+    the same player's tag history (e.g., "POL PLC" for Poland -> Commonwealth).
+    Returns a list of tag-lists, where each inner list is one player's tags.
+    """
     humans_file = SCRIPT_DIR / "HUMANS.txt"
-    countries = {}
+    players = []
     if humans_file.exists():
         with open(humans_file, 'r') as f:
             for line in f:
                 line = line.strip()
                 if line and not line.startswith('#'):
-                    countries[line] = line
-    return countries
+                    tags = line.split()
+                    if tags:
+                        players.append(tags)
+    return players
 
 
 # Load player countries from config file
-PLAYER_COUNTRIES = load_human_countries()
+# PLAYER_TAGS is a list of tag-lists (one per player)
+PLAYER_TAGS = load_human_countries()
+
+# For backwards compatibility, create flat dict of all tags
+PLAYER_COUNTRIES = {}
+for tags in PLAYER_TAGS:
+    for tag in tags:
+        PLAYER_COUNTRIES[tag] = tag
 
 # Religion ID to name mapping
 RELIGION_NAMES = {
@@ -62,6 +76,17 @@ class CountryStats:
     ruler_dip: int = 0
     ruler_mil: int = 0
     ruler_traits: list = field(default_factory=list)
+    ruler_age: int = 0
+    ruler_birth_date: str = ""
+
+    # Regency
+    is_regency: bool = False
+    regent_id: int = 0
+    regent_name: str = ""
+    regent_adm: int = 0
+    regent_dip: int = 0
+    regent_mil: int = 0
+    regent_age: int = 0
 
     # Rank
     great_power_rank: int = 0
@@ -89,6 +114,7 @@ class CountryStats:
     # Tech
     num_researched_advances: int = 0
     institutions: list = field(default_factory=list)
+    research_progress: float = 0.0  # Current progress toward next advance
 
     # Government
     government_type: str = ""
@@ -273,6 +299,25 @@ def get_subjects_for_countries(filepath: str, player_tags: list[str]) -> dict[st
     return result
 
 
+def calculate_age(birth_date: str, current_date: str) -> int:
+    """Calculate age from birth_date and current_date (both YYYY.M.D format)."""
+    try:
+        birth_parts = birth_date.split('.')
+        current_parts = current_date.split('.')
+        if len(birth_parts) >= 3 and len(current_parts) >= 3:
+            birth_year = int(birth_parts[0])
+            birth_month = int(birth_parts[1])
+            current_year = int(current_parts[0])
+            current_month = int(current_parts[1])
+            age = current_year - birth_year
+            if current_month < birth_month:
+                age -= 1
+            return max(0, age)
+    except (ValueError, IndexError):
+        pass
+    return 0
+
+
 def find_character(filepath: str, char_id: int) -> dict | None:
     """Find a character by ID in character_db."""
     with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
@@ -313,6 +358,7 @@ def find_character(filepath: str, char_id: int) -> dict | None:
                 'mil': extract_value(text, r'mil=(\d+)', int, 0),
                 'first_name': extract_value(text, r'first_name="([^"]+)"', str, ""),
                 'nickname': extract_value(text, r'nickname="([^"]+)"', str, ""),
+                'birth_date': extract_value(text, r'birth_date=(\d+\.\d+\.\d+)', str, ""),
                 'traits': re.findall(r'traits=\{([^}]+)\}', text),
             }
     return None
@@ -370,6 +416,11 @@ def parse_country_block(text: str, tag: str) -> CountryStats:
     advances = extract_dict(text, 'researched_advances')
     stats.num_researched_advances = sum(1 for v in advances.values() if v == True)
     stats.institutions = [k for k, v in extract_dict(text, 'institutions').items() if v == True]
+
+    # Research progress - extract from current_research block
+    research_block = extract_block(text, 'current_research')
+    if research_block:
+        stats.research_progress = extract_value(research_block, r'progress=([\d.]+)', float, 0.0)
 
     # Government
     stats.government_type = extract_value(govt_block, r'type=(\w+)', str, "")
@@ -473,6 +524,7 @@ def print_comparison(countries: list[CountryStats]):
     print(f"{'Ruler ADM':<25} " + " ".join(f"{c.ruler_adm:>11}" for c in countries))
     print(f"{'Ruler DIP':<25} " + " ".join(f"{c.ruler_dip:>11}" for c in countries))
     print(f"{'Ruler MIL':<25} " + " ".join(f"{c.ruler_mil:>11}" for c in countries))
+    print(f"{'Ruler Age':<25} " + " ".join(f"{c.ruler_age if c.ruler_age > 0 else '?':>11}" for c in countries))
 
     # Economy
     print(f"\n{'=== ECONOMY ===':<25}")
@@ -1001,31 +1053,43 @@ def main():
     print(f"Output: {output_dir}")
 
     countries = []
-    for tag, name in PLAYER_COUNTRIES.items():
-        print(f"  {tag}...", end=" ", flush=True)
-        country_text = find_country_in_file(str(save_file), tag)
+    for player_tags in PLAYER_TAGS:
+        # Try each tag in the player's tag list (newest/formed nation first)
+        found = False
+        for tag in reversed(player_tags):
+            print(f"  {tag}...", end=" ", flush=True)
+            country_text = find_country_in_file(str(save_file), tag)
 
-        if country_text:
-            stats = parse_country_block(country_text, tag)
+            if country_text:
+                stats = parse_country_block(country_text, tag)
 
-            # Get ruler stats
-            if stats.ruler_id:
-                ruler = find_character(str(save_file), stats.ruler_id)
-                if ruler:
-                    stats.ruler_adm = ruler['adm']
-                    stats.ruler_dip = ruler['dip']
-                    stats.ruler_mil = ruler['mil']
-                    name_parts = []
-                    if ruler['first_name']:
-                        name_parts.append(ruler['first_name'].replace('name_', ''))
-                    if ruler['nickname']:
-                        name_parts.append(f'"{ruler["nickname"]}"')
-                    stats.ruler_name = ' '.join(name_parts)
+                # Get ruler stats
+                if stats.ruler_id:
+                    ruler = find_character(str(save_file), stats.ruler_id)
+                    if ruler:
+                        stats.ruler_adm = ruler['adm']
+                        stats.ruler_dip = ruler['dip']
+                        stats.ruler_mil = ruler['mil']
+                        name_parts = []
+                        if ruler['first_name']:
+                            name_parts.append(ruler['first_name'].replace('name_', ''))
+                        if ruler['nickname']:
+                            name_parts.append(f'"{ruler["nickname"]}"')
+                        stats.ruler_name = ' '.join(name_parts)
+                        stats.ruler_birth_date = ruler.get('birth_date', '')
+                        if stats.ruler_birth_date:
+                            stats.ruler_age = calculate_age(stats.ruler_birth_date, save_date)
 
-            countries.append(stats)
-            print(f"GP#{stats.great_power_rank}, Pop: {format_pop(stats.population)}, Ruler: {stats.ruler_adm}/{stats.ruler_dip}/{stats.ruler_mil}")
-        else:
-            print("NOT FOUND")
+                countries.append(stats)
+                age_str = f", age {stats.ruler_age}" if stats.ruler_age > 0 else ""
+                print(f"GP#{stats.great_power_rank}, Pop: {format_pop(stats.population)}, Ruler: {stats.ruler_adm}/{stats.ruler_dip}/{stats.ruler_mil}{age_str}")
+                found = True
+                break
+            else:
+                print("not found, ", end="")
+
+        if not found:
+            print(f"NOT FOUND (tried: {', '.join(player_tags)})")
 
     if countries:
         # Extract subject relationships
