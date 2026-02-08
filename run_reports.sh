@@ -39,16 +39,16 @@ echo ""
 # Run generate_report.py (text reports)
 echo "=== Generating text reports ==="
 if [ -n "$PREV_SAVE" ]; then
-    python3 generate_report.py -o "$OUTPUT_DIR" --no-timestamp --compare "$PREV_SAVE"
+    python3 generate_report.py "$SAVE_FILE" -o "$OUTPUT_DIR" --no-timestamp --compare "$PREV_SAVE"
 else
-    python3 generate_report.py -o "$OUTPUT_DIR" --no-timestamp
+    python3 generate_report.py "$SAVE_FILE" -o "$OUTPUT_DIR" --no-timestamp
 fi
 
 echo ""
 
 # Run compare_players_v2.py (charts)
 echo "=== Generating charts ==="
-python3 compare_players_v2.py -o "$OUTPUT_DIR" --no-timestamp
+python3 compare_players_v2.py "$SAVE_FILE" -o "$OUTPUT_DIR" --no-timestamp
 
 echo ""
 echo "=== Done ==="

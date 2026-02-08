@@ -1592,20 +1592,22 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description='Generate EU5 multiplayer session report')
+    parser.add_argument('save_file', nargs='?', help='Save file to analyze (default: most recent in save/)')
     parser.add_argument('-o', '--output', help='Output directory (default: reports/)')
     parser.add_argument('--no-timestamp', action='store_true', help='Don\'t create timestamped subfolder')
     parser.add_argument('--compare', help='Previous save file to compare against')
     args = parser.parse_args()
 
     # Find save file
-    save_dir = SCRIPT_DIR / "save"
-    save_files = list(save_dir.glob("*.eu5"))
-
-    if not save_files:
-        print("No .eu5 save files found")
-        sys.exit(1)
-
-    save_file = save_files[0]
+    if args.save_file:
+        save_file = Path(args.save_file)
+    else:
+        save_dir = SCRIPT_DIR / "save"
+        save_files = sorted(save_dir.glob("*.eu5"), key=lambda f: f.stat().st_mtime, reverse=True)
+        if not save_files:
+            print("No .eu5 save files found")
+            sys.exit(1)
+        save_file = save_files[0]
     save_date = get_save_date(str(save_file))
 
     # Determine output directory
